@@ -35,8 +35,10 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
+        Text(
+          '${widget.property.title} ${widget.property.required ? "*" : ""}',
+          style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle,
+        ),
         FormField<bool>(
           key: Key(widget.property.idKey),
           initialValue: widget.property.defaultValue ?? false,

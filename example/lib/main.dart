@@ -200,17 +200,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     if (['file', 'file3'].contains(key)) {
                       return OutlinedButton(
                         onPressed: onPressed,
-                        child: Text('+ Agregar archivo $key'),
                         style: ButtonStyle(
-                            minimumSize: MaterialStateProperty.all(
-                                const Size(double.infinity, 40)),
-                            backgroundColor: MaterialStateProperty.all(
-                              const Color(0xffcee5ff),
-                            ),
-                            side: MaterialStateProperty.all(
-                                const BorderSide(color: Color(0xffafd5ff))),
-                            textStyle: MaterialStateProperty.all(
-                                const TextStyle(color: Color(0xff057afb)))),
+                          minimumSize: WidgetStateProperty.all(
+                              const Size(double.infinity, 40)),
+                          backgroundColor: WidgetStateProperty.all(
+                            const Color(0xffcee5ff),
+                          ),
+                          side: WidgetStateProperty.all(
+                              const BorderSide(color: Color(0xffafd5ff))),
+                          textStyle: WidgetStateProperty.all(
+                              const TextStyle(color: Color(0xff057afb))),
+                        ),
+                        child: Text('+ Agregar archivo $key'),
                       );
                     }
 

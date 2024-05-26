@@ -78,22 +78,25 @@ class _FileJFormFieldState extends State<FileJFormField> {
 
                 return ListTile(
                   title: Text(
-                      file.path.characters
-                          .takeLastWhile((p0) => p0 != '/')
-                          .string,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: widget.property.readOnly
-                          ? const TextStyle(color: Colors.grey)
-                          : widgetBuilderInherited.uiConfig.label),
+                    file.path.characters
+                        .takeLastWhile((p0) => p0 != '/')
+                        .string,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: widget.property.readOnly
+                        ? const TextStyle(color: Colors.grey)
+                        : widgetBuilderInherited.uiConfig.label,
+                  ),
                   trailing: IconButton(
                     icon: const Icon(Icons.close, size: 14),
                     onPressed: () {
                       change(
-                          field,
-                          field.value!
-                            ..removeWhere(
-                                (element) => element.path == file.path));
+                        field,
+                        field.value!
+                          ..removeWhere(
+                            (element) => element.path == file.path,
+                          ),
+                      );
                     },
                   ),
                 );
@@ -143,10 +146,10 @@ class _FileJFormFieldState extends State<FileJFormField> {
 
     return ElevatedButton(
       onPressed: _onTap(field),
-      child: const Text('Add File'),
       style: ButtonStyle(
-        minimumSize: MaterialStateProperty.all(const Size(double.infinity, 40)),
+        minimumSize: WidgetStateProperty.all(const Size(double.infinity, 40)),
       ),
+      child: const Text('Add File'),
     );
   }
 }

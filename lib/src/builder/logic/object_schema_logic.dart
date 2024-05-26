@@ -38,8 +38,13 @@ class ObjectSchemaInherited extends InheritedWidget {
   }
 
   /// esta funcion comunica
-  void listenChangeProperty(bool active, SchemaProperty schemaProperty,
-      {dynamic optionalValue, Schema? mainSchema, String? idOptional}) async {
+  void listenChangeProperty(
+    bool active,
+    SchemaProperty schemaProperty, {
+    dynamic optionalValue,
+    Schema? mainSchema,
+    String? idOptional,
+  }) async {
     try {
       // Eliminamos los nuevos imputs agregados
       await _removeCreatedItemsSafeMode(schemaProperty);
@@ -54,7 +59,7 @@ class ObjectSchemaInherited extends InheritedWidget {
         for (var element in schemaObject.properties!) {
           if ((schemaProperty.dependents as List).contains(element.id)) {
             if (element is SchemaProperty) {
-              print('Este element ${element.id} es ahora $active');
+              dev.log('Este element ${element.id} es ahora $active');
               element.required = active;
             }
           }
@@ -137,12 +142,13 @@ class ObjectSchemaInherited extends InheritedWidget {
         listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
       }
     } catch (e) {
-      print(e.toString());
+      dev.log(e.toString());
     }
   }
 
   Future<void> _removeCreatedItemsSafeMode(
-      SchemaProperty schemaProperty) async {
+    SchemaProperty schemaProperty,
+  ) async {
     bool filter(Schema element) =>
         (element).dependentsAddedBy.contains(schemaProperty.id);
 

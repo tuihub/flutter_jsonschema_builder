@@ -6,9 +6,11 @@ import 'package:flutter_jsonschema_builder/src/fields/shared.dart';
 import 'package:flutter_jsonschema_builder/src/models/models.dart';
 
 class ArraySchemaBuilder extends StatefulWidget {
-  const ArraySchemaBuilder(
-      {Key? key, required this.mainSchema, required this.schemaArray})
-      : super(key: key);
+  const ArraySchemaBuilder({
+    Key? key,
+    required this.mainSchema,
+    required this.schemaArray,
+  }) : super(key: key);
   final Schema mainSchema;
   final SchemaArray schemaArray;
 
@@ -31,7 +33,10 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
       onSaved: (_) {
         if (widget.schemaArray.items.isEmpty) {
           widgetBuilderInherited.updateObjectData(
-              widgetBuilderInherited.data, widget.schemaArray.idKey, []);
+            widgetBuilderInherited.data,
+            widget.schemaArray.idKey,
+            [],
+          );
         }
       },
       builder: (field) {
@@ -56,7 +61,9 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
                     child: widgetBuilderInherited.uiConfig.removeItemBuilder !=
                             null
                         ? widgetBuilderInherited.uiConfig.removeItemBuilder!(
-                            () => _removeItem(index), widget.schemaArray.idKey)
+                            () => _removeItem(index),
+                            widget.schemaArray.idKey,
+                          )
                         : TextButton.icon(
                             onPressed: () => _removeItem(index),
                             icon: const Icon(Icons.remove),
@@ -71,7 +78,7 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
                   const SizedBox(height: 10),
                 ],
               );
-            }).toList(),
+            }),
             if (field.hasError) CustomErrorText(text: field.errorText!),
           ],
         );
@@ -86,7 +93,9 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
             alignment: Alignment.centerRight,
             child: widgetBuilderInherited.uiConfig.addItemBuilder != null
                 ? widgetBuilderInherited.uiConfig.addItemBuilder!(
-                    _addItem, widget.schemaArray.idKey)
+                    _addItem,
+                    widget.schemaArray.idKey,
+                  )
                 : TextButton.icon(
                     onPressed: _addItem,
                     icon: const Icon(Icons.add),
@@ -125,11 +134,13 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
     } else {
       widget.schemaArray.items =
           (widget.schemaArray.itemsBaseSchema as List<Map<String, dynamic>>)
-              .map((e) => Schema.fromJson(
-                    e,
-                    id: '0',
-                    parent: widget.schemaArray,
-                  ))
+              .map(
+                (e) => Schema.fromJson(
+                  e,
+                  id: '0',
+                  parent: widget.schemaArray,
+                ),
+              )
               .toList();
     }
   }

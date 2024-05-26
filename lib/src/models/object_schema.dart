@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import '../models/models.dart';
 
 class SchemaObject extends Schema {
@@ -66,7 +68,7 @@ class SchemaObject extends Schema {
     String? parentIdKey,
     List<String>? dependentsAddedBy,
   }) {
-    var newSchema = SchemaObject(
+    final newSchema = SchemaObject(
       id: id,
       title: title,
       description: description,
@@ -82,11 +84,13 @@ class SchemaObject extends Schema {
     final otherProperties = properties!; //.map((p) => p.copyWith(id: p.id));
 
     newSchema.properties = otherProperties
-        .map((e) => e.copyWith(
-              id: e.id,
-              parentIdKey: newSchema.idKey,
-              dependentsAddedBy: newSchema.dependentsAddedBy,
-            ))
+        .map(
+          (e) => e.copyWith(
+            id: e.id,
+            parentIdKey: newSchema.idKey,
+            dependentsAddedBy: newSchema.dependentsAddedBy,
+          ),
+        )
         .toList();
 
     return newSchema;
@@ -139,7 +143,7 @@ class SchemaObject extends Schema {
     SchemaObject schema,
   ) {
     if (properties == null) return;
-    var props = <Schema>[];
+    final props = <Schema>[];
 
     properties.forEach((key, _property) {
       final isRequired = schema.required.contains(key);
@@ -168,9 +172,9 @@ class SchemaObject extends Schema {
   void setOneOf(List<dynamic>? oneOf, SchemaObject schema) {
     if (oneOf == null) return;
     oneOf.map((e) => Map<String, dynamic>.from(e));
-    var oneOfs = <Schema>[];
+    final oneOfs = <Schema>[];
     for (var element in oneOf) {
-      print(element);
+      log(element);
       oneOfs.add(Schema.fromJson(element, parent: schema));
     }
 

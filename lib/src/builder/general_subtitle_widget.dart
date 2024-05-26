@@ -19,18 +19,18 @@ class GeneralSubtitle extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height:25),
+        const SizedBox(height: 25),
         if (mainSchemaTitle != title && title != kNoTitle) ...[
           Text(
             title,
-            style:  WidgetBuilderInherited.of(context).uiConfig.subtitle,
+            style: WidgetBuilderInherited.of(context).uiConfig.subtitle,
           ),
-          const Divider()
+          const Divider(),
         ],
         if (description != null && description != nainSchemaDescription)
           Text(
             description!,
-            style:  WidgetBuilderInherited.of(context).uiConfig.description,
+            style: WidgetBuilderInherited.of(context).uiConfig.description,
           ),
       ],
     );

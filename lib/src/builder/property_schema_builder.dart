@@ -64,8 +64,11 @@ class PropertySchemaBuilder extends StatelessWidget {
           updateData(context, val);
         },
         onChanged: (value) {
-          dispatchSelectedForDropDownEventToParent(context, value,
-              id: schemaProperty.id);
+          dispatchSelectedForDropDownEventToParent(
+            context,
+            value,
+            id: schemaProperty.id,
+          );
           updateData(context, value);
           widgetBuilderInherited.notifyChanges();
         },
@@ -85,8 +88,11 @@ class PropertySchemaBuilder extends StatelessWidget {
           }
         },
         onChanged: (value) {
-          dispatchSelectedForDropDownEventToParent(context, value,
-              id: schemaProperty.id);
+          dispatchSelectedForDropDownEventToParent(
+            context,
+            value,
+            id: schemaProperty.id,
+          );
 
           if (value is OneOfModel) {
             updateData(context, value.oneOfModelEnum?.first);
@@ -134,25 +140,28 @@ class PropertySchemaBuilder extends StatelessWidget {
           }
 
           if (schemaProperty.format == PropertyFormat.dataurl) {
-            assert(WidgetBuilderInherited.of(context).fileHandler != null,
-                'File handler can not be null when using file inputs');
+            assert(
+              WidgetBuilderInherited.of(context).fileHandler != null,
+              'File handler can not be null when using file inputs',
+            );
             _field = FileJFormField(
               property: schemaPropertySorted,
               fileHandler: getCustomFileHanlder(
-                  WidgetBuilderInherited.of(context).fileHandler!,
-                  schemaProperty.id),
+                WidgetBuilderInherited.of(context).fileHandler!,
+                schemaProperty.id,
+              ),
               onSaved: (val) {
                 log('onSaved: FileJFormField  ${schemaProperty.idKey}  : $val');
                 updateData(context, val);
               },
               onChanged: (value) {
-                print(value);
-
+                log(value);
                 dispatchBooleanEventToParent(
-                    context,
-                    schemaProperty.isMultipleFile
-                        ? value is List && value.isNotEmpty
-                        : value != null);
+                  context,
+                  schemaProperty.isMultipleFile
+                      ? value is List && value.isNotEmpty
+                      : value != null,
+                );
 
                 updateData(context, value);
                 widgetBuilderInherited.notifyChanges();
@@ -270,7 +279,10 @@ class PropertySchemaBuilder extends StatelessWidget {
   void updateData(BuildContext context, dynamic val) {
     final widgetBuilderInherited = WidgetBuilderInherited.of(context);
     widgetBuilderInherited.updateObjectData(
-        WidgetBuilderInherited.of(context).data, schemaProperty.idKey, val);
+      WidgetBuilderInherited.of(context).data,
+      schemaProperty.idKey,
+      val,
+    );
   }
 
   // @temp Functions
@@ -288,21 +300,24 @@ class PropertySchemaBuilder extends StatelessWidget {
   }
 
   void dispatchSelectedForDropDownEventToParent(
-      BuildContext context, dynamic value,
-      {String? id}) {
-    debugPrint('dispatchSelectedForDropDownEventToParent()  $value ID: $id');
+    BuildContext context,
+    dynamic value, {
+    String? id,
+  }) {
+    log('dispatchSelectedForDropDownEventToParent()  $value ID: $id');
     ObjectSchemaInherited.of(context).listenChangeProperty(
-        (value != null && (value is String ? value.isNotEmpty : true)),
-        schemaProperty,
-        optionalValue: value,
-        idOptional: id,
-        mainSchema: mainSchema);
+      (value != null && (value is String ? value.isNotEmpty : true)),
+      schemaProperty,
+      optionalValue: value,
+      idOptional: id,
+      mainSchema: mainSchema,
+    );
     // }
   }
 
   /// Cuando se valida si es true o false
   void dispatchBooleanEventToParent(BuildContext context, bool value) {
-    debugPrint('dispatchBooleanEventToParent()  $value');
+    log('dispatchBooleanEventToParent()  $value');
     if (value != schemaProperty.isDependentsActive) {
       ObjectSchemaInherited.of(context)
           .listenChangeProperty(value, schemaProperty);
@@ -310,7 +325,9 @@ class PropertySchemaBuilder extends StatelessWidget {
   }
 
   Future<List<XFile>?> Function() getCustomFileHanlder(
-      FileHandler customFileHandler, String key) {
+    FileHandler customFileHandler,
+    String key,
+  ) {
     final handlers = customFileHandler();
     assert(handlers.isNotEmpty, 'CustomFileHandler must not be empty');
 
@@ -326,7 +343,9 @@ class PropertySchemaBuilder extends StatelessWidget {
   }
 
   Future<dynamic> Function(Map<dynamic, dynamic>)? _getCustomPickerHanlder(
-      BuildContext context, String key) {
+    BuildContext context,
+    String key,
+  ) {
     final customFileHandler =
         WidgetBuilderInherited.of(context).customPickerHandler;
 
@@ -342,7 +361,9 @@ class PropertySchemaBuilder extends StatelessWidget {
   }
 
   String? Function(dynamic)? _getCustomValidator(
-      BuildContext context, String key) {
+    BuildContext context,
+    String key,
+  ) {
     final customValidatorHandler =
         WidgetBuilderInherited.of(context).customValidatorHandler;
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
@@ -63,11 +65,13 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
     // fill selected value
 
     try {
-      final exists = listOfModel.firstWhere((e) =>
-          e.oneOfModelEnum is List &&
-          e.oneOfModelEnum!.map((i) => i.toLowerCase()).contains(
-                widget.property.defaultValue.toLowerCase(),
-              ));
+      final exists = listOfModel.firstWhere(
+        (e) =>
+            e.oneOfModelEnum is List &&
+            e.oneOfModelEnum!.map((i) => i.toLowerCase()).contains(
+                  widget.property.defaultValue.toLowerCase(),
+                ),
+      );
 
       valueSelected = exists;
     } catch (e) {
@@ -85,8 +89,10 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
+        Text(
+          '${widget.property.title} ${widget.property.required ? "*" : ""}',
+          style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle,
+        ),
         GestureDetector(
           onTap: _onTap,
           child: AbsorbPointer(
@@ -109,8 +115,8 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
               onChanged: _onChanged,
               onSaved: widget.onSaved,
               decoration: InputDecoration(
-                  errorStyle:
-                      WidgetBuilderInherited.of(context).uiConfig.error),
+                errorStyle: WidgetBuilderInherited.of(context).uiConfig.error,
+              ),
             ),
           ),
         ),
@@ -119,7 +125,7 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
   }
 
   void _onTap() async {
-    print('ontap');
+    log('ontap');
     if (widget.customPickerHandler == null) return;
     final response = await widget.customPickerHandler!(_getItems());
 
@@ -143,22 +149,24 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
     if (listOfModel.isEmpty) return [];
 
     return listOfModel
-        .map((item) => DropdownMenuItem<OneOfModel>(
-              value: item,
-              child: Text(
-                item.title ?? '',
-                style: widget.property.readOnly
-                    ? const TextStyle(color: Colors.grey)
-                    : WidgetBuilderInherited.of(context).uiConfig.label,
-              ),
-            ))
+        .map(
+          (item) => DropdownMenuItem<OneOfModel>(
+            value: item,
+            child: Text(
+              item.title ?? '',
+              style: widget.property.readOnly
+                  ? const TextStyle(color: Colors.grey)
+                  : WidgetBuilderInherited.of(context).uiConfig.label,
+            ),
+          ),
+        )
         .toList();
   }
 
   Map _getItems() {
     if (listOfModel.isEmpty) return {};
 
-    var data = {};
+    final data = {};
     for (final element in listOfModel) {
       data[element] = element.title;
     }

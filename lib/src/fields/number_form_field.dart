@@ -45,13 +45,15 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
+        Text(
+          '${widget.property.title} ${widget.property.required ? "*" : ""}',
+          style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle,
+        ),
         TextFormField(
           key: Key(widget.property.idKey),
           keyboardType: TextInputType.number,
           inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))
+            FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
           ],
           autofocus: false,
           onSaved: widget.onSaved,

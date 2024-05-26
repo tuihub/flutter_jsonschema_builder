@@ -57,10 +57,13 @@ class _JsonFormState extends State<JsonForm> {
 
   @override
   void initState() {
-    mainSchema = (Schema.fromJson(json.decode(widget.jsonSchema),
-        id: kGenesisIdKey) as SchemaObject)
+    mainSchema = (Schema.fromJson(
+      json.decode(widget.jsonSchema),
+      id: kGenesisIdKey,
+    ) as SchemaObject)
       ..setUiSchema(
-          widget.uiSchema != null ? json.decode(widget.uiSchema!) : null);
+        widget.uiSchema != null ? json.decode(widget.uiSchema!) : null,
+      );
 
     super.initState();
   }
@@ -72,42 +75,45 @@ class _JsonFormState extends State<JsonForm> {
       fileHandler: widget.fileHandler,
       customPickerHandler: widget.customPickerHandler,
       customValidatorHandler: widget.customValidatorHandler,
-      child: Builder(builder: (context) {
-        final widgetBuilderInherited = WidgetBuilderInherited.of(context);
+      child: Builder(
+        builder: (context) {
+          final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 
-        return SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Container(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                children: <Widget>[
-                  if (!kReleaseMode)
-                    TextButton(
-                      onPressed: () {
-                        inspect(mainSchema);
-                      },
-                      child: const Text('INSPECT'),
+          return SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Container(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  children: <Widget>[
+                    if (!kReleaseMode)
+                      TextButton(
+                        onPressed: () {
+                          inspect(mainSchema);
+                        },
+                        child: const Text('INSPECT'),
+                      ),
+                    _buildHeaderTitle(context),
+                    FormFromSchemaBuilder(
+                      mainSchema: mainSchema,
+                      schema: mainSchema,
                     ),
-                  _buildHeaderTitle(context),
-                  FormFromSchemaBuilder(
-                    mainSchema: mainSchema,
-                    schema: mainSchema,
-                  ),
-                  const SizedBox(height: 20),
-                  widgetBuilderInherited.uiConfig.submitButtonBuilder == null
-                      ? ElevatedButton(
-                          onPressed: () => onSubmit(widgetBuilderInherited),
-                          child: const Text('Submit'),
-                        )
-                      : widgetBuilderInherited.uiConfig.submitButtonBuilder!(
-                          () => onSubmit(widgetBuilderInherited)),
-                ],
+                    const SizedBox(height: 20),
+                    widgetBuilderInherited.uiConfig.submitButtonBuilder == null
+                        ? ElevatedButton(
+                            onPressed: () => onSubmit(widgetBuilderInherited),
+                            child: const Text('Submit'),
+                          )
+                        : widgetBuilderInherited.uiConfig.submitButtonBuilder!(
+                            () => onSubmit(widgetBuilderInherited),
+                          ),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      }),
+          );
+        },
+      ),
     )..setJsonFormSchemaStyle(context, widget.jsonFormSchemaUiConfig);
   }
 
@@ -142,8 +148,7 @@ class _JsonFormState extends State<JsonForm> {
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       _formKey.currentState?.save();
 
-      print(widgetBuilderInherited.data);
-
+      log(widgetBuilderInherited.data.toString());
       widget.onFormDataSaved(widgetBuilderInherited.data);
     }
   }

@@ -46,12 +46,13 @@ class _ObjectSchemaBuilderState extends State<ObjectSchemaBuilder> {
             nainSchemaDescription: widget.mainSchema.description,
           ),
           if (widget.schemaObject.properties != null)
-            ...widget.schemaObject.properties!
-                .map((e) => FormFromSchemaBuilder(
-                    schemaObject: widget.schemaObject,
-                    mainSchema: widget.mainSchema,
-                    schema: e))
-                .toList(),
+            ...widget.schemaObject.properties!.map(
+              (e) => FormFromSchemaBuilder(
+                schemaObject: widget.schemaObject,
+                mainSchema: widget.mainSchema,
+                schema: e,
+              ),
+            ),
         ],
       ),
     );

@@ -49,7 +49,7 @@ class SchemaArray extends Schema {
     String? parentIdKey,
     List<String>? dependentsAddedBy,
   }) {
-    var newSchema = SchemaArray(
+    final newSchema = SchemaArray(
       id: id,
       title: title,
       maxItems: maxItems,
@@ -63,11 +63,13 @@ class SchemaArray extends Schema {
       ..type = type;
 
     newSchema.items = items
-        .map((e) => e.copyWith(
-              id: e.id,
-              parentIdKey: newSchema.idKey,
-              dependentsAddedBy: newSchema.dependentsAddedBy,
-            ))
+        .map(
+          (e) => e.copyWith(
+            id: e.id,
+            parentIdKey: newSchema.idKey,
+            dependentsAddedBy: newSchema.dependentsAddedBy,
+          ),
+        )
         .toList();
 
     return newSchema;

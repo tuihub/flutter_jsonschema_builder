@@ -24,7 +24,9 @@ class WidgetBuilderInherited extends InheritedWidget {
   late final JsonFormSchemaUiConfig uiConfig;
 
   void setJsonFormSchemaStyle(
-      BuildContext context, JsonFormSchemaUiConfig? uiConfig) {
+    BuildContext context,
+    JsonFormSchemaUiConfig? uiConfig,
+  ) {
     final textTheme = Theme.of(context).textTheme;
 
     this.uiConfig = JsonFormSchemaUiConfig(
@@ -35,8 +37,9 @@ class WidgetBuilderInherited extends InheritedWidget {
       description: uiConfig?.description ?? textTheme.bodyMedium,
       error: uiConfig?.error ??
           TextStyle(
-              color: Theme.of(context).colorScheme.error,
-              fontSize: textTheme.bodySmall!.fontSize),
+            color: Theme.of(context).colorScheme.error,
+            fontSize: textTheme.bodySmall!.fontSize,
+          ),
       fieldTitle: uiConfig?.fieldTitle ?? textTheme.bodyMedium,
       label: uiConfig?.label,
       //builders
@@ -49,7 +52,7 @@ class WidgetBuilderInherited extends InheritedWidget {
 
   /// update [data] with key,values from jsonSchema
   void updateObjectData(object, String path, dynamic value) {
-    print('updateObjectData $object path $path value $value');
+    log('updateObjectData $object path $path value $value');
 
     final stack = path.split('.');
 

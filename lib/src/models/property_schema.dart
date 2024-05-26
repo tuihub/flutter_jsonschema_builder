@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import '../models/models.dart';
 
 enum PropertyFormat { general, password, date, datetime, email, dataurl, uri }
@@ -22,7 +24,7 @@ PropertyFormat propertyFormatFromString(String? value) {
 }
 
 dynamic safeDefaultValue(Map<String, dynamic> json) {
-  if (schemaTypeFromString(json['type']) == SchemaType.boolean) {
+  if (SchemaType.values.byName(json['type']) == SchemaType.boolean) {
     if (json['default'] is String) return json['default'] == 'true';
 
     if (json['default'] is int) return json['default'] == 1;
@@ -62,7 +64,7 @@ class SchemaProperty extends Schema {
     final property = SchemaProperty(
       id: id,
       title: json['title'],
-      type: schemaTypeFromString(json['type']),
+      type: SchemaType.values.byName(json['type']),
       format: propertyFormatFromString(json['format']),
       defaultValue: safeDefaultValue(json),
       description: json['description'],
@@ -96,17 +98,18 @@ class SchemaProperty extends Schema {
     String? parentIdKey,
     List<String>? dependentsAddedBy,
   }) {
-    var newSchema = SchemaProperty(
-        id: id,
-        title: title,
-        type: type,
-        description: description,
-        format: format,
-        defaultValue: defaultValue,
-        enumNames: enumNames,
-        enumm: enumm,
-        required: required,
-        oneOf: oneOf)
+    final newSchema = SchemaProperty(
+      id: id,
+      title: title,
+      type: type,
+      description: description,
+      format: format,
+      defaultValue: defaultValue,
+      enumNames: enumNames,
+      enumm: enumm,
+      required: required,
+      oneOf: oneOf,
+    )
       ..autoFocus = autoFocus
       ..order = order
       ..widget = widget
@@ -176,7 +179,7 @@ class SchemaProperty extends Schema {
     uiSchema.forEach((key, data) {
       switch (key) {
         case "ui:disabled":
-          print('aplicamos pues ctmr');
+          log('aplicamos pues ctmr');
           disabled = data as bool;
           break;
         case "ui:order":

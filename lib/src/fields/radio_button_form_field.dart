@@ -32,10 +32,9 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
 
   @override
   void initState() {
-    print(widget.property.defaultValue);
+    log(widget.property.defaultValue);
 
     // fill enum property
-
     if (widget.property.enumm == null) {
       switch (widget.property.type) {
         case SchemaType.boolean:
@@ -62,13 +61,16 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
   @override
   Widget build(BuildContext context) {
     assert(widget.property.enumm != null, 'enum is required');
-    assert(() {
-      if (widget.property.enumNames != null) {
-        return widget.property.enumNames!.length ==
-            widget.property.enumm!.length;
-      }
-      return true;
-    }(), '[enumNames] and [enum]  must be the same size ');
+    assert(
+      () {
+        if (widget.property.enumNames != null) {
+          return widget.property.enumNames!.length ==
+              widget.property.enumm!.length;
+        }
+        return true;
+      }(),
+      '[enumNames] and [enum]  must be the same size ',
+    );
 
     inspect(widget.property);
     return FormField<dynamic>(
@@ -89,36 +91,38 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-                '${widget.property.title} ${widget.property.required ? "*" : ""}',
-                style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
+              '${widget.property.title} ${widget.property.required ? "*" : ""}',
+              style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle,
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: List<Widget>.generate(
-                  widget.property.enumNames?.length ?? 0,
-                  (int i) => RadioListTile(
-                        value: widget.property.enumm != null
-                            ? widget.property.enumm![i]
-                            : i,
-                        title: Text(widget.property.enumNames?[i],
-                            style: widget.property.readOnly
-                                ? const TextStyle(color: Colors.grey)
-                                : WidgetBuilderInherited.of(context)
-                                    .uiConfig
-                                    .label),
-                        groupValue: groupValue,
-                        onChanged: widget.property.readOnly
-                            ? null
-                            : (dynamic value) {
-                                print(value);
-                                groupValue = value;
-                                if (value != null) {
-                                  field.didChange(groupValue);
-                                  if (widget.onChanged != null) {
-                                    widget.onChanged!(groupValue!);
-                                  }
-                                }
-                              },
-                      )),
+                widget.property.enumNames?.length ?? 0,
+                (int i) => RadioListTile(
+                  value: widget.property.enumm != null
+                      ? widget.property.enumm![i]
+                      : i,
+                  title: Text(
+                    widget.property.enumNames?[i],
+                    style: widget.property.readOnly
+                        ? const TextStyle(color: Colors.grey)
+                        : WidgetBuilderInherited.of(context).uiConfig.label,
+                  ),
+                  groupValue: groupValue,
+                  onChanged: widget.property.readOnly
+                      ? null
+                      : (dynamic value) {
+                          log(value);
+                          groupValue = value;
+                          if (value != null) {
+                            field.didChange(groupValue);
+                            if (widget.onChanged != null) {
+                              widget.onChanged!(groupValue!);
+                            }
+                          }
+                        },
+                ),
+              ),
             ),
             if (field.hasError) CustomErrorText(text: field.errorText!),
           ],

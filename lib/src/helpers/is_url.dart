@@ -15,7 +15,7 @@ bool isURL(String? input, [Map<String, dynamic>? options]) {
     return false;
   }
 
-  Map<String, dynamic> defaultUrlOptions = {
+  final Map<String, dynamic> defaultUrlOptions = {
     'protocols': ['http', 'https', 'ftp'],
     'require_tld': true,
     'require_protocol': false,

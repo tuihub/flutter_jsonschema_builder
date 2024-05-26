@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
@@ -50,19 +52,24 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
   @override
   Widget build(BuildContext context) {
     assert(widget.property.enumm != null, 'enum is required');
-    assert(() {
-      if (widget.property.enumNames != null) {
-        return widget.property.enumNames!.length ==
-            widget.property.enumm!.length;
-      }
-      return true;
-    }(), '[enumNames] and [enum]  must be the same size ');
+    assert(
+      () {
+        if (widget.property.enumNames != null) {
+          return widget.property.enumNames!.length ==
+              widget.property.enumm!.length;
+        }
+        return true;
+      }(),
+      '[enumNames] and [enum]  must be the same size ',
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
+        Text(
+          '${widget.property.title} ${widget.property.required ? "*" : ""}',
+          style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle,
+        ),
         GestureDetector(
           onTap: _onTap,
           child: AbsorbPointer(
@@ -98,7 +105,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
   }
 
   void _onTap() async {
-    print('ontap');
+    log('ontap');
     if (widget.customPickerHandler == null) return;
     final response = await widget.customPickerHandler!(_getItems());
     if (response != null) _onChanged(response);
@@ -121,8 +128,8 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
       final text = widget.property.enumNames?[i] ?? value;
       w.add(
         DropdownMenuItem(
-          child: Text(text.toString()),
           value: value,
+          child: Text(text.toString()),
         ),
       );
     }
@@ -130,7 +137,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
   }
 
   Map _getItems() {
-    var data = {};
+    final data = {};
     for (var i = 0; i < widget.property.enumm!.length; i++) {
       final value = widget.property.enumm![i];
       final text = widget.property.enumNames?[i] ?? value;

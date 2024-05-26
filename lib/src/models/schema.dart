@@ -1,22 +1,17 @@
-import 'package:flutter/foundation.dart';
 import '../models/models.dart';
 // Esto transforma el JSON a Modelos
 
 enum SchemaType { string, number, boolean, integer, object, array, enumm }
 
-SchemaType schemaTypeFromString(String value) {
-  return SchemaType.values.where((e) => describeEnum(e) == value).first;
-}
-
 class Schema {
-  Schema(
-      {required this.id,
-      required this.type,
-      this.title = 'no-title',
-      this.description,
-      this.parentIdKey,
-      List<String>? dependentsAddedBy})
-      : dependentsAddedBy = dependentsAddedBy ?? [];
+  Schema({
+    required this.id,
+    required this.type,
+    this.title = 'no-title',
+    this.description,
+    this.parentIdKey,
+    List<String>? dependentsAddedBy,
+  }) : dependentsAddedBy = dependentsAddedBy ?? [];
 
   factory Schema.fromJson(
     Map<String, dynamic> json, {
@@ -34,7 +29,7 @@ class Schema {
 
     json['type'] ??= 'object';
 
-    switch (schemaTypeFromString(json['type'])) {
+    switch (SchemaType.values.byName(json['type'])) {
       case SchemaType.object:
         schema = SchemaObject.fromJson(id, json, parent: parent);
         break;
@@ -45,7 +40,6 @@ class Schema {
         // validate if is a file array, it means multiplefile
         if (schema is SchemaArray && schema.isArrayMultipleFile())
           schema = schema.toSchemaPropertyMultipleFiles();
-
         break;
 
       default:
