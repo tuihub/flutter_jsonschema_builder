@@ -88,9 +88,7 @@ class SchemaArray extends Schema {
   bool required;
 
   bool isArrayMultipleFile() {
-    return (itemsBaseSchema is Map &&
-        itemsBaseSchema.containsKey('format') &&
-        itemsBaseSchema['format'] == 'data-url');
+    return itemsBaseSchema is Map && itemsBaseSchema['format'] == 'data-url';
   }
 
   SchemaProperty toSchemaPropertyMultipleFiles() {

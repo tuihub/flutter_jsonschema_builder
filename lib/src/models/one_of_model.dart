@@ -21,7 +21,7 @@ class OneOfModel {
   String? title;
 
   factory OneOfModel.fromJson(Map<String, dynamic> json) => OneOfModel(
-        oneOfModelEnum: List<String>.from(json["enum"].map((x) => x)),
+        oneOfModelEnum: List<String>.from(json["enum"]),
         type: json["type"],
         title: json["title"],
       );

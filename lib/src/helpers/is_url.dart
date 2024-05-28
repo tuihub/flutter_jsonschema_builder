@@ -95,14 +95,13 @@ bool isURL(String? input, [Map<String, dynamic>? options]) {
       return false;
     }
   }
-
-  if (options['host_whitelist']?.isNotEmpty == true &&
-      !options['host_whitelist'].contains(host)) {
+  final host_whitelist = options['host_whitelist'] as List?;
+  if (host_whitelist?.isNotEmpty != true && !host_whitelist!.contains(host)) {
     return false;
   }
 
-  if (options['host_blacklist']?.isNotEmpty == true &&
-      options['host_blacklist'].contains(host)) {
+  final host_blacklist = options['host_blacklist'] as List?;
+  if (host_blacklist?.isNotEmpty == true && host_blacklist!.contains(host)) {
     return false;
   }
 

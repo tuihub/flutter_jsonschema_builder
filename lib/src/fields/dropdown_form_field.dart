@@ -111,14 +111,13 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
     if (response != null) _onChanged(response);
   }
 
-  Function(dynamic)? _onChanged(dynamic value) {
-    if (widget.property.readOnly) return null;
-    return (value) {
-      if (widget.onChanged != null) widget.onChanged!(value);
-      setState(() {
-        this.value = value;
-      });
-    }(value);
+  void _onChanged(dynamic value) {
+    if (widget.property.readOnly) return;
+
+    if (widget.onChanged != null) widget.onChanged!(value);
+    setState(() {
+      this.value = value;
+    });
   }
 
   List<DropdownMenuItem>? _buildItems() {

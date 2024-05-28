@@ -32,7 +32,7 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
 
   @override
   void initState() {
-    log(widget.property.defaultValue);
+    log(widget.property.defaultValue.toString());
 
     // fill enum property
     if (widget.property.enumm == null) {
@@ -103,7 +103,7 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
                       ? widget.property.enumm![i]
                       : i,
                   title: Text(
-                    widget.property.enumNames?[i],
+                    widget.property.enumNames![i],
                     style: widget.property.readOnly
                         ? const TextStyle(color: Colors.grey)
                         : WidgetBuilderInherited.of(context).uiConfig.label,
@@ -112,7 +112,7 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
                   onChanged: widget.property.readOnly
                       ? null
                       : (dynamic value) {
-                          log(value);
+                          log(value.toString());
                           groupValue = value;
                           if (value != null) {
                             field.didChange(groupValue);

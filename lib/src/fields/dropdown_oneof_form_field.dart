@@ -52,10 +52,11 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
 
     if (widget.property.oneOf is List) {
       for (int i = 0; i < (widget.property.oneOf?.length ?? 0); i++) {
+        final oneOfItem = widget.property.oneOf![i] as Map;
         final customObject = OneOfModel(
-          oneOfModelEnum: widget.property.oneOf![i]['enum'],
-          title: widget.property.oneOf![i]['title'],
-          type: widget.property.oneOf![i]['type'],
+          oneOfModelEnum: oneOfItem['enum'],
+          title: oneOfItem['title'],
+          type: oneOfItem['type'],
         );
 
         listOfModel.add(customObject);
@@ -65,12 +66,11 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
     // fill selected value
 
     try {
+      final defaultValue = widget.property.defaultValue.toLowerCase();
       final exists = listOfModel.firstWhere(
         (e) =>
-            e.oneOfModelEnum is List &&
-            e.oneOfModelEnum!.map((i) => i.toLowerCase()).contains(
-                  widget.property.defaultValue.toLowerCase(),
-                ),
+            e.oneOfModelEnum != null &&
+            e.oneOfModelEnum!.any((i) => i.toLowerCase() == defaultValue),
       );
 
       valueSelected = exists;
@@ -129,20 +129,18 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
     if (widget.customPickerHandler == null) return;
     final response = await widget.customPickerHandler!(_getItems());
 
-    if (response != null) _onChanged(response);
+    if (response != null) _onChanged(response as OneOfModel);
   }
 
-  Function(dynamic)? _onChanged(dynamic value) {
-    if (widget.property.readOnly) return null;
+  void _onChanged(OneOfModel? value) {
+    if (widget.property.readOnly) return;
 
-    return (OneOfModel? value) {
-      setState(() {
-        valueSelected = value;
-      });
-      if (widget.onChanged != null) {
-        widget.onChanged!(value?.oneOfModelEnum?.first);
-      }
-    }(value);
+    setState(() {
+      valueSelected = value;
+    });
+    if (widget.onChanged != null) {
+      widget.onChanged!(value?.oneOfModelEnum?.first);
+    }
   }
 
   List<DropdownMenuItem<OneOfModel>>? _buildItems() {

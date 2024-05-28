@@ -33,9 +33,9 @@ class _DateJFormFieldState extends State<DateJFormField> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (widget.property.defaultValue != null &&
-          DateTime.tryParse(widget.property.defaultValue) != null)
-        txtDateCtrl.updateText(widget.property.defaultValue);
+      final defaultValue = widget.property.defaultValue as String?;
+      if (defaultValue != null && DateTime.tryParse(defaultValue) != null)
+        txtDateCtrl.updateText(defaultValue);
     });
 
     widget.triggetDefaultValue();

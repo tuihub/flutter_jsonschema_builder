@@ -123,25 +123,26 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
   }
 
   void _addFirstItem() {
-    if (widget.schemaArray.itemsBaseSchema is Object) {
+    final itemsBaseSchema = widget.schemaArray.itemsBaseSchema;
+    if (itemsBaseSchema is Map<String, dynamic>) {
       final newSchema = Schema.fromJson(
-        widget.schemaArray.itemsBaseSchema,
+        itemsBaseSchema,
         id: '0',
         parent: widget.schemaArray,
       );
 
       widget.schemaArray.items = [newSchema];
     } else {
-      widget.schemaArray.items =
-          (widget.schemaArray.itemsBaseSchema as List<Map<String, dynamic>>)
-              .map(
-                (e) => Schema.fromJson(
-                  e,
-                  id: '0',
-                  parent: widget.schemaArray,
-                ),
-              )
-              .toList();
+      widget.schemaArray.items = (itemsBaseSchema as List)
+          .cast<Map<String, dynamic>>()
+          .map(
+            (e) => Schema.fromJson(
+              e,
+              id: '0',
+              parent: widget.schemaArray,
+            ),
+          )
+          .toList();
     }
   }
 

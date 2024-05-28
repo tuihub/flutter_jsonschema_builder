@@ -51,7 +51,7 @@ class WidgetBuilderInherited extends InheritedWidget {
   }
 
   /// update [data] with key,values from jsonSchema
-  void updateObjectData(object, String path, dynamic value) {
+  void updateObjectData(dynamic object, String path, dynamic value) {
     log('updateObjectData $object path $path value $value');
 
     final stack = path.split('.');
@@ -71,7 +71,7 @@ class WidgetBuilderInherited extends InheritedWidget {
         object = tempObject;
       } else {
         object[_key] = newContent;
-        object = object[_key];
+        object = newContent;
       }
 
       stack.removeAt(0);
@@ -86,7 +86,7 @@ class WidgetBuilderInherited extends InheritedWidget {
   }
 
   /// add a new value into a schema,
-  void _addNewContent(object, int? _keyNumeric, dynamic value) {
+  void _addNewContent(dynamic object, int? _keyNumeric, dynamic value) {
     if (object is List && _keyNumeric != null) {
       if (object.length - 1 < _keyNumeric) {
         object.add(value);

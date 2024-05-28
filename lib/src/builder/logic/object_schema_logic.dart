@@ -50,14 +50,14 @@ class ObjectSchemaInherited extends InheritedWidget {
       await _removeCreatedItemsSafeMode(schemaProperty);
       // Obtenemos el index del actual property para anadir a abajo de él
       final indexProperty = schemaObject.properties!.indexOf(schemaProperty);
-
-      if (schemaProperty.dependents is List) {
+      final dependents = schemaProperty.dependents;
+      if (dependents is List) {
         dev.log('case 1');
 
         // Cuando es una Lista de String y todos ellos ahoran serán requeridos
 
         for (var element in schemaObject.properties!) {
-          if ((schemaProperty.dependents as List).contains(element.id)) {
+          if (dependents.contains(element.id)) {
             if (element is SchemaProperty) {
               dev.log('Este element ${element.id} es ahora $active');
               element.required = active;
@@ -67,29 +67,27 @@ class ObjectSchemaInherited extends InheritedWidget {
 
         schemaProperty.isDependentsActive = active;
         listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
-      } else if (schemaProperty.dependents != null &&
-          schemaProperty.dependents.containsKey("oneOf")) {
+      } else if (dependents is Map && dependents.containsKey("oneOf")) {
         // Cuando es OneOf
 
         dev.log('case OneOf');
 
-        final oneOfs = schemaProperty.dependents['oneOf'];
+        final oneOfs = dependents['oneOf'];
 
         if (oneOfs is List) {
-          for (Map<String, dynamic> oneOf in oneOfs) {
+          for (Map<String, dynamic> oneOf in oneOfs.cast()) {
+            final properties = oneOf['properties'] as Map?;
             // Verificamos si es el que requerimos
-            if (oneOf.containsKey('properties') &&
-                !oneOf['properties'].containsKey(schemaProperty.id)) continue;
+            if (properties == null ||
+                !properties.containsKey(schemaProperty.id)) continue;
 
+            final prop = properties[schemaProperty.id];
             // Verificamos que tenga la estructura enum correcta
-            if (oneOf['properties'][schemaProperty.id] is! Map ||
-                !oneOf['properties'][schemaProperty.id].containsKey('enum'))
-              continue;
+            if (prop is! Map || !prop.containsKey('enum')) continue;
 
             // Guardamos los valores que se van a condicionar para que salgan los nuevos inputs
 
-            final valuesForCondition =
-                oneOf['properties'][schemaProperty.id]['enum'];
+            final valuesForCondition = prop['enum'] as List;
 
             // si tiene uno del valor seleccionado en el select, mostramos
             if (valuesForCondition.contains(optionalValue)) {
@@ -125,10 +123,10 @@ class ObjectSchemaInherited extends InheritedWidget {
 
         // distpach Event
         listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
-      } else if (schemaProperty.dependents is Schema) {
+      } else if (dependents is Schema) {
         // Cuando es un Schema simple
         dev.log('case 3');
-        final _schema = schemaProperty.dependents;
+        final _schema = dependents;
 
         if (active) {
           schemaObject.properties!.add(_schema);
@@ -156,7 +154,7 @@ class ObjectSchemaInherited extends InheritedWidget {
       schemaObject.properties!.removeWhere(filter);
 
       listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
-      await Future.delayed(const Duration(milliseconds: 100));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
     }
   }
 }

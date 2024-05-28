@@ -21,10 +21,9 @@ class Schema {
     Schema schema;
 
 // Solucion temporal y personalizada
-    if (json['enum'] != null &&
-        json['enum'] is List<String> &&
-        json['enum'].length == 1) {
-      return SchemaEnum(enumm: json['enum']);
+    final enumm = json['enum'];
+    if (enumm is List<String> && enumm.length == 1) {
+      return SchemaEnum(enumm: enumm);
     }
 
     json['type'] ??= 'object';

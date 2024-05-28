@@ -25,9 +25,8 @@ class SchemaObject extends Schema {
       id: id,
       title: json['title'],
       description: json['description'],
-      required: json["required"] != null
-          ? List<String>.from(json["required"].map((x) => x))
-          : [],
+      required:
+          json["required"] != null ? List<String>.from(json["required"]) : [],
       dependencies: json['dependencies'],
     );
     schema.parentIdKey = parent?.idKey;
@@ -139,7 +138,7 @@ class SchemaObject extends Schema {
   }
 
   void setProperties(
-    dynamic properties,
+    Map<String, dynamic>? properties,
     SchemaObject schema,
   ) {
     if (properties == null) return;
@@ -147,9 +146,8 @@ class SchemaObject extends Schema {
 
     properties.forEach((key, _property) {
       final isRequired = schema.required.contains(key);
-      Schema? property;
 
-      property = Schema.fromJson(
+      final property = Schema.fromJson(
         _property,
         id: key,
         parent: schema,
@@ -171,10 +169,9 @@ class SchemaObject extends Schema {
 
   void setOneOf(List<dynamic>? oneOf, SchemaObject schema) {
     if (oneOf == null) return;
-    oneOf.map((e) => Map<String, dynamic>.from(e));
     final oneOfs = <Schema>[];
-    for (var element in oneOf) {
-      log(element);
+    for (Map<String, dynamic> element in oneOf.cast()) {
+      log(element.toString());
       oneOfs.add(Schema.fromJson(element, parent: schema));
     }
 

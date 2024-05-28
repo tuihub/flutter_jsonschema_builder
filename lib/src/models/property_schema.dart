@@ -131,10 +131,10 @@ class SchemaProperty extends Schema {
   PropertyFormat format;
 
   /// it means enum
-  List? enumm;
+  List<dynamic>? enumm;
 
   /// displayed as text if is not empty
-  List? enumNames;
+  List<String>? enumNames;
 
   dynamic defaultValue;
 
