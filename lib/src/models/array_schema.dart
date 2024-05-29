@@ -10,19 +10,18 @@ import '../models/models.dart';
 
 class SchemaArray extends Schema {
   SchemaArray({
-    required String id,
+    required super.id,
     required this.itemsBaseSchema,
-    String? title,
+    super.title = kNoTitle,
     this.minItems,
     this.maxItems,
     this.uniqueItems = true,
-    this.items = const [],
+    List<Schema>? items,
     this.required = false,
-  }) : super(
-          id: id,
-          title: title ?? 'no-title',
-          type: SchemaType.array,
-        );
+    super.parentIdKey,
+    super.dependentsAddedBy,
+  })  : items = items ?? [],
+        super(type: SchemaType.array);
 
   factory SchemaArray.fromJson(
     String id,
@@ -36,10 +35,9 @@ class SchemaArray extends Schema {
       maxItems: json['maxItems'],
       uniqueItems: json['uniqueItems'] ?? true,
       itemsBaseSchema: json['items'],
+      parentIdKey: parent?.idKey,
     );
-
-    schemaArray.parentIdKey = parent?.idKey;
-    schemaArray.dependentsAddedBy.addAll(parent?.dependentsAddedBy ?? []);
+    schemaArray.dependentsAddedBy.addAll(parent?.dependentsAddedBy ?? const []);
 
     return schemaArray;
   }
@@ -57,29 +55,27 @@ class SchemaArray extends Schema {
       uniqueItems: uniqueItems,
       itemsBaseSchema: itemsBaseSchema,
       required: required,
-    )
-      ..parentIdKey = parentIdKey ?? this.parentIdKey
-      ..dependentsAddedBy = dependentsAddedBy ?? this.dependentsAddedBy
-      ..type = type;
-
-    newSchema.items = items
-        .map(
-          (e) => e.copyWith(
-            id: e.id,
-            parentIdKey: newSchema.idKey,
-            dependentsAddedBy: newSchema.dependentsAddedBy,
-          ),
-        )
-        .toList();
+      parentIdKey: parentIdKey ?? this.parentIdKey,
+      dependentsAddedBy: dependentsAddedBy ?? this.dependentsAddedBy,
+    );
+    newSchema.items.addAll(
+      items.map(
+        (e) => e.copyWith(
+          id: e.id,
+          parentIdKey: newSchema.idKey,
+          dependentsAddedBy: newSchema.dependentsAddedBy,
+        ),
+      ),
+    );
 
     return newSchema;
   }
 
   /// can be array of [Schema] or [Schema]
-  List<Schema> items;
+  final List<Schema> items;
 
   // it allow us
-  dynamic itemsBaseSchema;
+  final dynamic itemsBaseSchema;
 
   int? minItems;
   int? maxItems;
@@ -88,7 +84,8 @@ class SchemaArray extends Schema {
   bool required;
 
   bool isArrayMultipleFile() {
-    return itemsBaseSchema is Map && itemsBaseSchema['format'] == 'data-url';
+    return itemsBaseSchema is Map &&
+        (itemsBaseSchema as Map)['format'] == 'data-url';
   }
 
   SchemaProperty toSchemaPropertyMultipleFiles() {
@@ -99,9 +96,8 @@ class SchemaArray extends Schema {
       format: PropertyFormat.dataurl,
       required: required,
       description: description,
-    )
-      ..parentIdKey = parentIdKey
-      ..dependentsAddedBy = dependentsAddedBy
-      ..isMultipleFile = true;
+      parentIdKey: parentIdKey,
+      dependentsAddedBy: dependentsAddedBy,
+    )..isMultipleFile = true;
   }
 }

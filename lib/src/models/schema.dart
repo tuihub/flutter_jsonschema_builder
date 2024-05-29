@@ -7,7 +7,7 @@ class Schema {
   Schema({
     required this.id,
     required this.type,
-    this.title = 'no-title',
+    this.title = kNoTitle,
     this.description,
     this.parentIdKey,
     List<String>? dependentsAddedBy,
@@ -50,18 +50,18 @@ class Schema {
   }
 
   // props
-  String id;
+  final String id;
   String title;
   String? description;
-  SchemaType type;
+  final SchemaType type;
 
   // util props
-  String? parentIdKey;
-  List<String> dependentsAddedBy = [];
+  final String? parentIdKey;
+  final List<String> dependentsAddedBy;
 
   /// it lets us know the key in the formData Map {key}
   String get idKey {
-    if (parentIdKey != null && parentIdKey != (kGenesisIdKey)) {
+    if (parentIdKey != null && parentIdKey != kGenesisIdKey) {
       return _appendId(parentIdKey!, id);
     }
 
@@ -93,7 +93,7 @@ class SchemaEnum extends Schema {
   SchemaEnum({required this.enumm})
       : super(
           id: kNoIdKey,
-          title: 'no-title',
+          title: kNoTitle,
           type: SchemaType.enumm,
         );
 

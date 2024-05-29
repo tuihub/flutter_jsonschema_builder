@@ -4,17 +4,14 @@ import '../models/models.dart';
 
 class SchemaObject extends Schema {
   SchemaObject({
-    required String id,
+    required super.id,
     this.required = const [],
     this.dependencies,
-    String? title,
-    String? description,
-  }) : super(
-          id: id,
-          title: title ?? 'no-title',
-          type: SchemaType.object,
-          description: description,
-        );
+    super.title = kNoTitle,
+    super.description,
+    super.parentIdKey,
+    super.dependentsAddedBy,
+  }) : super(type: SchemaType.object);
 
   factory SchemaObject.fromJson(
     String id,
@@ -28,9 +25,8 @@ class SchemaObject extends Schema {
       required:
           json["required"] != null ? List<String>.from(json["required"]) : [],
       dependencies: json['dependencies'],
+      parentIdKey: parent?.idKey,
     );
-    schema.parentIdKey = parent?.idKey;
-
     schema.dependentsAddedBy.addAll(parent?.dependentsAddedBy ?? []);
 
     if (json['properties'] != null) {
@@ -71,10 +67,9 @@ class SchemaObject extends Schema {
       id: id,
       title: title,
       description: description,
+      parentIdKey: parentIdKey ?? this.parentIdKey,
+      dependentsAddedBy: dependentsAddedBy ?? this.dependentsAddedBy,
     )
-      ..parentIdKey = parentIdKey ?? this.parentIdKey
-      ..dependentsAddedBy = dependentsAddedBy ?? this.dependentsAddedBy
-      ..type = type
       ..dependencies = dependencies
       ..oneOf = oneOf
       ..order = order

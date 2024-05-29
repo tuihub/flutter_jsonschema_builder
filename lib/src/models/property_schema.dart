@@ -35,10 +35,10 @@ dynamic safeDefaultValue(Map<String, dynamic> json) {
 
 class SchemaProperty extends Schema {
   SchemaProperty({
-    required String id,
-    required SchemaType type,
-    String? title,
-    String? description,
+    required super.id,
+    required super.type,
+    super.title = kNoTitle,
+    super.description,
     this.defaultValue,
     this.enumm,
     this.enumNames,
@@ -49,12 +49,9 @@ class SchemaProperty extends Schema {
     this.pattern,
     this.oneOf,
     this.readOnly = false,
-  }) : super(
-          id: id,
-          title: title ?? 'no-title',
-          type: type,
-          description: description,
-        );
+    super.parentIdKey,
+    super.dependentsAddedBy,
+  });
 
   factory SchemaProperty.fromJson(
     String id,
@@ -75,9 +72,9 @@ class SchemaProperty extends Schema {
       pattern: json['pattern'],
       oneOf: json['oneOf'],
       readOnly: json['readOnly'] ?? false,
+      parentIdKey: parent?.idKey,
     );
-    property.parentIdKey = parent?.idKey;
-    property.dependentsAddedBy.addAll(parent?.dependentsAddedBy ?? []);
+    property.dependentsAddedBy.addAll(parent?.dependentsAddedBy ?? const []);
 
     return property;
   }
@@ -109,6 +106,8 @@ class SchemaProperty extends Schema {
       enumm: enumm,
       required: required,
       oneOf: oneOf,
+      parentIdKey: parentIdKey ?? this.parentIdKey,
+      dependentsAddedBy: dependentsAddedBy ?? this.dependentsAddedBy,
     )
       ..autoFocus = autoFocus
       ..order = order
@@ -119,8 +118,6 @@ class SchemaProperty extends Schema {
       ..maxLength = maxLength
       ..minLength = minLength
       ..widget = widget
-      ..parentIdKey = parentIdKey ?? this.parentIdKey
-      ..dependentsAddedBy = dependentsAddedBy ?? this.dependentsAddedBy
       ..required = required
       ..dependents = dependents
       ..isMultipleFile = isMultipleFile;

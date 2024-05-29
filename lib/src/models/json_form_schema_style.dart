@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class JsonFormSchemaUiConfig {
-  JsonFormSchemaUiConfig({
+  const JsonFormSchemaUiConfig({
     this.fieldTitle,
     this.error,
     this.title,
@@ -15,22 +15,23 @@ class JsonFormSchemaUiConfig {
     this.addFileButtonBuilder,
   });
 
-  TextStyle? fieldTitle;
-  TextStyle? error;
-  TextStyle? title;
-  TextAlign? titleAlign;
-  TextStyle? subtitle;
-  TextStyle? description;
-  TextStyle? label;
+  final TextStyle? fieldTitle;
+  final TextStyle? error;
+  final TextStyle? title;
+  final TextAlign? titleAlign;
+  final TextStyle? subtitle;
+  final TextStyle? description;
+  final TextStyle? label;
 
-  Widget Function(VoidCallback onPressed, String key)? addItemBuilder;
-  Widget Function(VoidCallback onPressed, String key)? removeItemBuilder;
+  final Widget Function(VoidCallback onPressed, String key)? addItemBuilder;
+  final Widget Function(VoidCallback onPressed, String key)? removeItemBuilder;
 
   /// render a custom submit button
   /// @param [VoidCallback] submit function
-  Widget Function(VoidCallback onSubmit)? submitButtonBuilder;
+  final Widget Function(VoidCallback onSubmit)? submitButtonBuilder;
 
   /// render a custom button
-  /// if it returns null or it is null, it will build default buttom
-  Widget? Function(VoidCallback? onPressed, String key)? addFileButtonBuilder;
+  /// if it returns null or it is null, it will build default button
+  final Widget? Function(VoidCallback? onPressed, String key)?
+      addFileButtonBuilder;
 }

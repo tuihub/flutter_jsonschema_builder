@@ -1,24 +1,13 @@
-// To parse this JSON data, do
-//
-// @victwise
-
-import 'dart:convert';
-
-OneOfModel oneOfModelFromJson(String str) =>
-    OneOfModel.fromJson(json.decode(str));
-
-String oneOfModelToJson(OneOfModel data) => json.encode(data.toJson());
-
 class OneOfModel {
-  OneOfModel({
+  const OneOfModel({
     this.oneOfModelEnum,
     this.type,
     this.title,
   });
 
-  List<dynamic>? oneOfModelEnum;
-  String? type;
-  String? title;
+  final List<dynamic>? oneOfModelEnum;
+  final String? type;
+  final String? title;
 
   factory OneOfModel.fromJson(Map<String, dynamic> json) => OneOfModel(
         oneOfModelEnum: List<String>.from(json["enum"]),
