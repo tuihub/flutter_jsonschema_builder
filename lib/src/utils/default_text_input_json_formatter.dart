@@ -8,7 +8,6 @@ class DefaultTextInputJsonFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    // TODO: implement formatEditUpdate
     if (oldValue.text.length >= newValue.text.length) {
       return newValue;
     }

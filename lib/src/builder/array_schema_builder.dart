@@ -7,10 +7,10 @@ import 'package:flutter_jsonschema_builder/src/models/models.dart';
 
 class ArraySchemaBuilder extends StatefulWidget {
   const ArraySchemaBuilder({
-    Key? key,
+    super.key,
     required this.mainSchema,
     required this.schemaArray,
-  }) : super(key: key);
+  });
   final Schema mainSchema;
   final SchemaArray schemaArray;
 
@@ -21,13 +21,12 @@ class ArraySchemaBuilder extends StatefulWidget {
 class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
   @override
   Widget build(BuildContext context) {
-    Widget widgetBuilder;
     final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 
-    widgetBuilder = FormField(
+    final widgetBuilder = FormField(
       validator: (_) {
         if (widget.schemaArray.required && widget.schemaArray.items.isEmpty)
-          return 'is required';
+          return widgetBuilderInherited.localizedTexts.required();
         return null;
       },
       onSaved: (_) {
@@ -48,7 +47,7 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
               title: widget.schemaArray.title,
               description: widget.schemaArray.description,
               mainSchemaTitle: widget.mainSchema.title,
-              nainSchemaDescription: widget.mainSchema.description,
+              mainSchemaDescription: widget.mainSchema.description,
             ),
             ...widget.schemaArray.items.map((schemaLoop) {
               final index = widget.schemaArray.items.indexOf(schemaLoop);
@@ -131,25 +130,25 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
         parent: widget.schemaArray,
       );
 
-      widget.schemaArray.items = [newSchema];
+      widget.schemaArray.items.add(newSchema);
     } else {
-      widget.schemaArray.items = (itemsBaseSchema as List)
-          .cast<Map<String, dynamic>>()
-          .map(
-            (e) => Schema.fromJson(
-              e,
-              id: '0',
-              parent: widget.schemaArray,
+      widget.schemaArray.items.addAll(
+        (itemsBaseSchema as List).cast<Map<String, dynamic>>().map(
+              (e) => Schema.fromJson(
+                e,
+                id: '0',
+                parent: widget.schemaArray,
+              ),
             ),
-          )
-          .toList();
+      );
     }
   }
 
   void _addItemFromFirstSchema() {
-    final newSchemaObject = widget.schemaArray.items.first
-        .copyWith(id: widget.schemaArray.items.length.toString());
+    final currentItems = widget.schemaArray.items;
+    final newSchemaObject =
+        currentItems.first.copyWith(id: currentItems.length.toString());
 
-    widget.schemaArray.items.add(newSchemaObject);
+    currentItems.add(newSchemaObject);
   }
 }

@@ -11,18 +11,12 @@ import '../models/models.dart';
 
 class TextJFormField extends PropertyFieldWidget<String> {
   const TextJFormField({
-    Key? key,
-    required SchemaProperty property,
-    required final ValueSetter<String?> onSaved,
-    required final ValueChanged<String?> onChanged,
-    String? Function(dynamic)? customValidator,
-  }) : super(
-          key: key,
-          property: property,
-          onSaved: onSaved,
-          onChanged: onChanged,
-          customValidator: customValidator,
-        );
+    super.key,
+    required super.property,
+    required super.onSaved,
+    super.onChanged,
+    super.customValidator,
+  });
 
   @override
   _TextJFormFieldState createState() => _TextJFormFieldState();
@@ -33,7 +27,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
 
   @override
   void initState() {
-    widget.triggetDefaultValue();
+    widget.triggerDefaultValue();
     super.initState();
   }
 

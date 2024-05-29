@@ -19,7 +19,7 @@ class DateTextInputJsonFormatter extends TextInputFormatter {
       return oldValue;
     }
 
-    final dateText = _addSeperators(newValue.text, '-');
+    final dateText = _addSeparators(newValue.text, '-');
 
     if (dateText.length == 1) {
       if (!RegExp(r'([0-3])$').hasMatch(dateText)) {
@@ -83,16 +83,16 @@ class DateTextInputJsonFormatter extends TextInputFormatter {
     );
   }
 
-  String _addSeperators(String value, String seperator) {
+  String _addSeparators(String value, String separator) {
     value = value.replaceAll('-', '');
     var newString = '';
     for (int i = 0; i < value.length; i++) {
       newString += value[i];
       if (i == 1) {
-        newString += seperator;
+        newString += separator;
       }
       if (i == 3) {
-        newString += seperator;
+        newString += separator;
       }
     }
     return newString;

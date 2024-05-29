@@ -14,12 +14,12 @@ export 'text_form_field.dart';
 
 abstract class PropertyFieldWidget<T> extends StatefulWidget {
   const PropertyFieldWidget({
-    Key? key,
+    super.key,
     required this.property,
     required this.onSaved,
     required this.onChanged,
     this.customValidator,
-  }) : super(key: key);
+  });
 
   final SchemaProperty property;
   final ValueSetter<T?> onSaved;
@@ -27,7 +27,7 @@ abstract class PropertyFieldWidget<T> extends StatefulWidget {
   final String? Function(dynamic)? customValidator;
 
   /// It calls onChanged
-  Future<dynamic> triggetDefaultValue() async {
+  Future<dynamic> triggerDefaultValue() async {
     final completer = Completer<void>();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -52,7 +52,4 @@ abstract class PropertyFieldWidget<T> extends StatefulWidget {
 
     return completer.future;
   }
-
-  @override
-  State createState();
 }

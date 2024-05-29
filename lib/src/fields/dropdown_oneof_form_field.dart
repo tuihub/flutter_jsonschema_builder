@@ -4,24 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 import 'package:flutter_jsonschema_builder/src/models/one_of_model.dart';
-import 'package:flutter_jsonschema_builder/src/models/property_schema.dart';
 import 'package:flutter_jsonschema_builder/src/models/schema.dart';
 
 class DropdownOneOfJFormField extends PropertyFieldWidget<dynamic> {
   const DropdownOneOfJFormField({
-    Key? key,
-    required SchemaProperty property,
-    required final ValueSetter<dynamic> onSaved,
-    ValueChanged<dynamic>? onChanged,
+    super.key,
+    required super.property,
+    required super.onSaved,
+    super.onChanged,
     this.customPickerHandler,
-    final String? Function(dynamic)? customValidator,
-  }) : super(
-          key: key,
-          property: property,
-          onSaved: onSaved,
-          onChanged: onChanged,
-          customValidator: customValidator,
-        );
+    super.customValidator,
+  });
 
   final Future<dynamic> Function(Map)? customPickerHandler;
 
@@ -64,7 +57,6 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
     }
 
     // fill selected value
-
     try {
       final defaultValue = widget.property.defaultValue.toLowerCase();
       final exists = listOfModel.firstWhere(
@@ -78,7 +70,7 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
       valueSelected = null;
     }
 
-    widget.triggetDefaultValue();
+    widget.triggerDefaultValue();
     super.initState();
   }
 
@@ -164,7 +156,7 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
   Map _getItems() {
     if (listOfModel.isEmpty) return {};
 
-    final data = {};
+    final Map data = {};
     for (final element in listOfModel) {
       data[element] = element.title;
     }

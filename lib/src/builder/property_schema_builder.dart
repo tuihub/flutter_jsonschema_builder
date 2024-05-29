@@ -17,11 +17,11 @@ import 'package:intl/intl.dart';
 
 class PropertySchemaBuilder extends StatelessWidget {
   const PropertySchemaBuilder({
-    Key? key,
+    super.key,
     required this.mainSchema,
     required this.schemaProperty,
     this.onChangeListen,
-  }) : super(key: key);
+  });
   final Schema mainSchema;
   final SchemaProperty schemaProperty;
   final ValueChanged<dynamic>? onChangeListen;
@@ -55,7 +55,7 @@ class PropertySchemaBuilder extends StatelessWidget {
                 schemaProperty.enumNames!.isNotEmpty))) {
       _field = DropDownJFormField(
         property: schemaPropertySorted,
-        customPickerHandler: _getCustomPickerHanlder(
+        customPickerHandler: _getCustomPickerHandler(
           context,
           schemaProperty.id,
         ),
@@ -77,7 +77,7 @@ class PropertySchemaBuilder extends StatelessWidget {
     } else if (schemaProperty.oneOf != null) {
       _field = DropdownOneOfJFormField(
         property: schemaPropertySorted,
-        customPickerHandler: _getCustomPickerHanlder(
+        customPickerHandler: _getCustomPickerHandler(
           context,
           schemaProperty.id,
         ),
@@ -146,7 +146,7 @@ class PropertySchemaBuilder extends StatelessWidget {
             );
             _field = FileJFormField(
               property: schemaPropertySorted,
-              fileHandler: getCustomFileHanlder(
+              fileHandler: getCustomFileHandler(
                 WidgetBuilderInherited.of(context).fileHandler!,
                 schemaProperty.id,
               ),
@@ -216,7 +216,6 @@ class PropertySchemaBuilder extends StatelessWidget {
               },
               onSaved: (val) {
                 log('onSaved: RadioButtonJFormField ${schemaProperty.idKey}  : $val');
-
                 updateData(context, val);
               },
               customValidator:
@@ -232,7 +231,6 @@ class PropertySchemaBuilder extends StatelessWidget {
               },
               onSaved: (val) {
                 log('onSaved: CheckboxJFormField ${schemaProperty.idKey}  : $val');
-
                 updateData(context, val);
               },
               customValidator:
@@ -324,7 +322,7 @@ class PropertySchemaBuilder extends StatelessWidget {
     }
   }
 
-  Future<List<XFile>?> Function() getCustomFileHanlder(
+  Future<List<XFile>?> Function() getCustomFileHandler(
     FileHandler customFileHandler,
     String key,
   ) {
@@ -342,7 +340,7 @@ class PropertySchemaBuilder extends StatelessWidget {
     throw Exception('no file handler found');
   }
 
-  Future<dynamic> Function(Map<dynamic, dynamic>)? _getCustomPickerHanlder(
+  Future<dynamic> Function(Map<dynamic, dynamic>)? _getCustomPickerHandler(
     BuildContext context,
     String key,
   ) {
@@ -352,11 +350,8 @@ class PropertySchemaBuilder extends StatelessWidget {
     if (customFileHandler == null) return null;
 
     final handlers = customFileHandler();
-
     if (handlers.containsKey(key)) return handlers[key];
-
     if (handlers.containsKey('*')) return handlers['*'];
-
     return null;
   }
 
@@ -370,11 +365,8 @@ class PropertySchemaBuilder extends StatelessWidget {
     if (customValidatorHandler == null) return null;
 
     final handlers = customValidatorHandler();
-
     if (handlers.containsKey(key)) return handlers[key];
-
     if (handlers.containsKey('*')) return handlers['*'];
-
     return null;
   }
 }

@@ -7,19 +7,13 @@ import '../models/models.dart';
 
 class DropDownJFormField extends PropertyFieldWidget<dynamic> {
   const DropDownJFormField({
-    Key? key,
-    required SchemaProperty property,
-    required final ValueSetter<dynamic> onSaved,
-    ValueChanged<dynamic>? onChanged,
+    super.key,
+    required super.property,
+    required super.onSaved,
+    super.onChanged,
     this.customPickerHandler,
-    final String? Function(dynamic)? customValidator,
-  }) : super(
-          key: key,
-          property: property,
-          onSaved: onSaved,
-          onChanged: onChanged,
-          customValidator: customValidator,
-        );
+    super.customValidator,
+  });
 
   final Future<dynamic> Function(Map)? customPickerHandler;
   @override
@@ -45,7 +39,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
     }
 
     value = widget.property.defaultValue;
-    widget.triggetDefaultValue();
+    widget.triggerDefaultValue();
     super.initState();
   }
 

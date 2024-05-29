@@ -2,22 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 import 'package:flutter_jsonschema_builder/src/fields/shared.dart';
-import '../models/models.dart';
 
 class CheckboxJFormField extends PropertyFieldWidget<bool> {
   const CheckboxJFormField({
-    Key? key,
-    required SchemaProperty property,
-    required final ValueSetter<bool?> onSaved,
-    ValueChanged<bool?>? onChanged,
-    final String? Function(dynamic)? customValidator,
-  }) : super(
-          key: key,
-          property: property,
-          onSaved: onSaved,
-          onChanged: onChanged,
-          customValidator: customValidator,
-        );
+    super.key,
+    required super.property,
+    required super.onSaved,
+    super.onChanged,
+    super.customValidator,
+  });
 
   @override
   _CheckboxJFormFieldState createState() => _CheckboxJFormFieldState();
@@ -26,7 +19,7 @@ class CheckboxJFormField extends PropertyFieldWidget<bool> {
 class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
   @override
   void initState() {
-    widget.triggetDefaultValue();
+    widget.triggerDefaultValue();
     super.initState();
   }
 

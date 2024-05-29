@@ -23,7 +23,7 @@ typedef CustomValidatorHandler = Map<String, String? Function(dynamic)?>
 
 class JsonForm extends StatefulWidget {
   const JsonForm({
-    Key? key,
+    super.key,
     required this.jsonSchema,
     this.uiSchema,
     required this.onFormDataSaved,
@@ -31,18 +31,15 @@ class JsonForm extends StatefulWidget {
     this.jsonFormSchemaUiConfig,
     this.customPickerHandler,
     this.customValidatorHandler,
-  }) : super(key: key);
+  });
 
   final String jsonSchema;
   final void Function(dynamic) onFormDataSaved;
 
   final String? uiSchema;
   final FileHandler? fileHandler;
-
   final JsonFormSchemaUiConfig? jsonFormSchemaUiConfig;
-
   final CustomPickerHandler? customPickerHandler;
-
   final CustomValidatorHandler? customValidatorHandler;
   @override
   _JsonFormState createState() => _JsonFormState();
@@ -156,11 +153,11 @@ class _JsonFormState extends State<JsonForm> {
 
 class FormFromSchemaBuilder extends StatelessWidget {
   const FormFromSchemaBuilder({
-    Key? key,
+    super.key,
     required this.mainSchema,
     required this.schema,
     this.schemaObject,
-  }) : super(key: key);
+  });
   final Schema mainSchema;
   final Schema schema;
   final SchemaObject? schemaObject;

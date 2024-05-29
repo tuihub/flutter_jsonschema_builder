@@ -4,23 +4,16 @@ import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logi
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 
 import './shared.dart';
-import '../models/models.dart';
 
 class FileJFormField extends PropertyFieldWidget<dynamic> {
   const FileJFormField({
-    Key? key,
-    required SchemaProperty property,
-    required final ValueSetter<dynamic> onSaved,
-    ValueChanged<dynamic>? onChanged,
+    super.key,
+    required super.property,
+    required super.onSaved,
+    super.onChanged,
     required this.fileHandler,
-    final String? Function(dynamic)? customValidator,
-  }) : super(
-          key: key,
-          property: property,
-          onSaved: onSaved,
-          onChanged: onChanged,
-          customValidator: customValidator,
-        );
+    super.customValidator,
+  });
 
   final Future<List<XFile>?> Function() fileHandler;
 
@@ -31,7 +24,7 @@ class FileJFormField extends PropertyFieldWidget<dynamic> {
 class _FileJFormFieldState extends State<FileJFormField> {
   @override
   void initState() {
-    widget.triggetDefaultValue();
+    widget.triggerDefaultValue();
     super.initState();
   }
 

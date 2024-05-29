@@ -4,22 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
-import '../models/models.dart';
 
 class NumberJFormField extends PropertyFieldWidget<String?> {
   const NumberJFormField({
-    Key? key,
-    required SchemaProperty property,
-    required final ValueSetter<String?> onSaved,
-    ValueChanged<String?>? onChanged,
-    final String? Function(dynamic)? customValidator,
-  }) : super(
-          key: key,
-          property: property,
-          onSaved: onSaved,
-          onChanged: onChanged,
-          customValidator: customValidator,
-        );
+    super.key,
+    required super.property,
+    required super.onSaved,
+    super.onChanged,
+    super.customValidator,
+  });
 
   @override
   _NumberJFormFieldState createState() => _NumberJFormFieldState();
@@ -28,9 +21,13 @@ class NumberJFormField extends PropertyFieldWidget<String?> {
 class _NumberJFormFieldState extends State<NumberJFormField> {
   Timer? _timer;
 
+  static final inputFormatters = [
+    FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
+  ];
+
   @override
   void initState() {
-    widget.triggetDefaultValue();
+    widget.triggerDefaultValue();
     super.initState();
   }
 
@@ -52,9 +49,7 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
         TextFormField(
           key: Key(widget.property.idKey),
           keyboardType: TextInputType.number,
-          inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
-          ],
+          inputFormatters: inputFormatters,
           autofocus: false,
           onSaved: widget.onSaved,
           autovalidateMode: AutovalidateMode.onUserInteraction,

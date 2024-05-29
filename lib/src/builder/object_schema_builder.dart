@@ -6,10 +6,10 @@ import 'package:flutter_jsonschema_builder/src/models/models.dart';
 
 class ObjectSchemaBuilder extends StatefulWidget {
   const ObjectSchemaBuilder({
-    Key? key,
+    super.key,
     required this.mainSchema,
     required this.schemaObject,
-  }) : super(key: key);
+  });
 
   final Schema mainSchema;
   final SchemaObject schemaObject;
@@ -43,7 +43,7 @@ class _ObjectSchemaBuilderState extends State<ObjectSchemaBuilder> {
             title: widget.schemaObject.title,
             description: widget.schemaObject.description,
             mainSchemaTitle: widget.mainSchema.title,
-            nainSchemaDescription: widget.mainSchema.description,
+            mainSchemaDescription: widget.mainSchema.description,
           ),
           if (widget.schemaObject.properties != null)
             ...widget.schemaObject.properties!.map(

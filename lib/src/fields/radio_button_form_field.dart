@@ -8,18 +8,12 @@ import '../models/models.dart';
 
 class RadioButtonJFormField extends PropertyFieldWidget<dynamic> {
   const RadioButtonJFormField({
-    Key? key,
-    required SchemaProperty property,
-    required final ValueSetter<dynamic> onSaved,
-    ValueChanged<dynamic>? onChanged,
-    final String? Function(dynamic)? customValidator,
-  }) : super(
-          key: key,
-          property: property,
-          onSaved: onSaved,
-          onChanged: onChanged,
-          customValidator: customValidator,
-        );
+    super.key,
+    required super.property,
+    required super.onSaved,
+    super.onChanged,
+    super.customValidator,
+  });
 
   @override
   _RadioButtonJFormFieldState createState() => _RadioButtonJFormFieldState();
@@ -54,7 +48,7 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
       groupValue = widget.property.defaultValue ?? 0;
     }
 
-    widget.triggetDefaultValue();
+    widget.triggerDefaultValue();
     super.initState();
   }
 

@@ -4,22 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/models/models.dart';
 
 class ObjectSchemaEvent {
-  ObjectSchemaEvent({required this.schemaObject});
+  const ObjectSchemaEvent({required this.schemaObject});
   final SchemaObject schemaObject;
 }
 
 class ObjectSchemaDependencyEvent extends ObjectSchemaEvent {
-  ObjectSchemaDependencyEvent({required SchemaObject schemaObject})
-      : super(schemaObject: schemaObject);
+  const ObjectSchemaDependencyEvent({required super.schemaObject});
 }
 
 class ObjectSchemaInherited extends InheritedWidget {
   const ObjectSchemaInherited({
-    Key? key,
+    super.key,
     required this.schemaObject,
-    required Widget child,
+    required super.child,
     required this.listen,
-  }) : super(key: key, child: child);
+  });
 
   final SchemaObject schemaObject;
   final ValueSetter<ObjectSchemaEvent?> listen;
@@ -33,11 +32,10 @@ class ObjectSchemaInherited extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant ObjectSchemaInherited oldWidget) {
-    final needsRepint = schemaObject != oldWidget.schemaObject;
-    return needsRepint;
+    final needsRepaint = schemaObject != oldWidget.schemaObject;
+    return needsRepaint;
   }
 
-  /// esta funcion comunica
   void listenChangeProperty(
     bool active,
     SchemaProperty schemaProperty, {
@@ -46,16 +44,15 @@ class ObjectSchemaInherited extends InheritedWidget {
     String? idOptional,
   }) async {
     try {
-      // Eliminamos los nuevos imputs agregados
+      // Eliminamos los nuevos inputs agregados
       await _removeCreatedItemsSafeMode(schemaProperty);
-      // Obtenemos el index del actual property para anadir a abajo de él
+      // Obtenemos el index del actual property para añadir a abajo de él
       final indexProperty = schemaObject.properties!.indexOf(schemaProperty);
       final dependents = schemaProperty.dependents;
       if (dependents is List) {
         dev.log('case 1');
 
         // Cuando es una Lista de String y todos ellos ahoran serán requeridos
-
         for (var element in schemaObject.properties!) {
           if (dependents.contains(element.id)) {
             if (element is SchemaProperty) {
@@ -68,8 +65,6 @@ class ObjectSchemaInherited extends InheritedWidget {
         schemaProperty.isDependentsActive = active;
         listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
       } else if (dependents is Map && dependents.containsKey("oneOf")) {
-        // Cuando es OneOf
-
         dev.log('case OneOf');
 
         final oneOfs = dependents['oneOf'];
@@ -86,15 +81,13 @@ class ObjectSchemaInherited extends InheritedWidget {
             if (prop is! Map || !prop.containsKey('enum')) continue;
 
             // Guardamos los valores que se van a condicionar para que salgan los nuevos inputs
-
             final valuesForCondition = prop['enum'] as List;
 
             // si tiene uno del valor seleccionado en el select, mostramos
             if (valuesForCondition.contains(optionalValue)) {
               schemaProperty.isDependentsActive = true;
 
-              // Add new propperties
-
+              // Add new properties
               final tempSchema = SchemaObject.fromJson(
                 kNoIdKey,
                 oneOf,
@@ -121,7 +114,7 @@ class ObjectSchemaInherited extends InheritedWidget {
           }
         }
 
-        // distpach Event
+        // dispatch Event
         listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
       } else if (dependents is Schema) {
         // Cuando es un Schema simple
@@ -148,13 +141,13 @@ class ObjectSchemaInherited extends InheritedWidget {
     SchemaProperty schemaProperty,
   ) async {
     bool filter(Schema element) =>
-        (element).dependentsAddedBy.contains(schemaProperty.id);
+        element.dependentsAddedBy.contains(schemaProperty.id);
 
-    if (schemaObject.properties!.where(filter).isNotEmpty) {
+    if (schemaObject.properties!.any(filter)) {
       schemaObject.properties!.removeWhere(filter);
 
       listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
-      await Future<void>.delayed(const Duration(milliseconds: 100));
+      await Future<void>.delayed(Duration.zero);
     }
   }
 }

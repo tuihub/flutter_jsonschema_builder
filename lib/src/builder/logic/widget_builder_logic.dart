@@ -7,16 +7,16 @@ import 'package:flutter_jsonschema_builder/src/models/schema.dart';
 
 class WidgetBuilderInherited extends InheritedWidget {
   WidgetBuilderInherited({
-    Key? key,
+    super.key,
     required this.mainSchema,
-    required Widget child,
+    required super.child,
     this.fileHandler,
     this.customPickerHandler,
     this.customValidatorHandler,
-  }) : super(key: key, child: child);
+  });
 
   final Schema mainSchema;
-  final data = {};
+  final Map data = {};
 
   final FileHandler? fileHandler;
   final CustomPickerHandler? customPickerHandler;

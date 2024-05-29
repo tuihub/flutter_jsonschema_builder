@@ -4,15 +4,15 @@ import 'package:flutter_jsonschema_builder/src/models/models.dart';
 
 class GeneralSubtitle extends StatelessWidget {
   const GeneralSubtitle({
-    Key? key,
+    super.key,
     required this.title,
     this.description,
     this.mainSchemaTitle,
-    this.nainSchemaDescription,
-  }) : super(key: key);
+    this.mainSchemaDescription,
+  });
 
   final String title;
-  final String? description, mainSchemaTitle, nainSchemaDescription;
+  final String? description, mainSchemaTitle, mainSchemaDescription;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class GeneralSubtitle extends StatelessWidget {
           ),
           const Divider(),
         ],
-        if (description != null && description != nainSchemaDescription)
+        if (description != null && description != mainSchemaDescription)
           Text(
             description!,
             style: WidgetBuilderInherited.of(context).uiConfig.description,
