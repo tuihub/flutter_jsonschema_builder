@@ -39,12 +39,13 @@ class _TextJFormFieldState extends State<TextJFormField> {
 
   @override
   Widget build(BuildContext context) {
+    final widgetBuilderInherited = WidgetBuilderInherited.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           '${widget.property.title} ${widget.property.required ? "*" : ""}',
-          style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle,
+          style: widgetBuilderInherited.uiConfig.fieldTitle,
         ),
         AbsorbPointer(
           absorbing: widget.property.disabled ?? false,
@@ -70,6 +71,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
             validator: (String? value) {
               if (widget.property.required && value != null) {
                 final validated = inputValidationJsonSchema(
+                  localizedTexts: widgetBuilderInherited.localizedTexts,
                   newValue: value,
                   property: widget.property,
                 );
@@ -83,14 +85,14 @@ class _TextJFormFieldState extends State<TextJFormField> {
             },
             style: widget.property.readOnly
                 ? const TextStyle(color: Colors.grey)
-                : WidgetBuilderInherited.of(context).uiConfig.label,
+                : widgetBuilderInherited.uiConfig.label,
             decoration: InputDecoration(
               helperText: widget.property.help != null &&
                       widget.property.help!.isNotEmpty
                   ? widget.property.help
                   : null,
               labelStyle: const TextStyle(color: Colors.blue),
-              errorStyle: WidgetBuilderInherited.of(context).uiConfig.error,
+              errorStyle: widgetBuilderInherited.uiConfig.error,
             ),
           ),
         ),

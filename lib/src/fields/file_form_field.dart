@@ -36,7 +36,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
       key: Key(widget.property.idKey),
       validator: (value) {
         if ((value == null || value.isEmpty) && widget.property.required) {
-          return 'Required';
+          return widgetBuilderInherited.localizedTexts.required();
         }
 
         if (widget.customValidator != null)
@@ -142,7 +142,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
       style: ButtonStyle(
         minimumSize: WidgetStateProperty.all(const Size(double.infinity, 40)),
       ),
-      child: const Text('Add File'),
+      child: Text(widgetBuilderInherited.localizedTexts.addFile()),
     );
   }
 }

@@ -39,12 +39,13 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
 
   @override
   Widget build(BuildContext context) {
+    final widgetBuilderInherited = WidgetBuilderInherited.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           '${widget.property.title} ${widget.property.required ? "*" : ""}',
-          style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle,
+          style: widgetBuilderInherited.uiConfig.fieldTitle,
         ),
         TextFormField(
           key: Key(widget.property.idKey),
@@ -63,16 +64,17 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
           },
           style: widget.property.readOnly
               ? const TextStyle(color: Colors.grey)
-              : WidgetBuilderInherited.of(context).uiConfig.label,
+              : widgetBuilderInherited.uiConfig.label,
           validator: (String? value) {
             if (widget.property.required && value != null && value.isEmpty) {
-              return 'Required';
+              return widgetBuilderInherited.localizedTexts.required();
             }
             if (widget.property.minLength != null &&
                 value != null &&
                 value.isNotEmpty &&
                 value.length <= widget.property.minLength!) {
-              return 'should NOT be shorter than ${widget.property.minLength} characters';
+              return widgetBuilderInherited.localizedTexts
+                  .minLength(minLength: widget.property.minLength!);
             }
 
             if (widget.customValidator != null)
@@ -84,7 +86,7 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
                 widget.property.help != null && widget.property.help!.isNotEmpty
                     ? widget.property.help
                     : null,
-            errorStyle: WidgetBuilderInherited.of(context).uiConfig.error,
+            errorStyle: widgetBuilderInherited.uiConfig.error,
           ),
         ),
       ],
