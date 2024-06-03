@@ -19,21 +19,23 @@ class ArraySchemaBuilder extends StatefulWidget {
 }
 
 class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
+  SchemaArray get schemaArray => widget.schemaArray;
+
   @override
   Widget build(BuildContext context) {
     final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 
     final widgetBuilder = FormField(
       validator: (_) {
-        if (widget.schemaArray.required && widget.schemaArray.items.isEmpty)
-          return widgetBuilderInherited.localizedTexts.required();
+        if (schemaArray.requiredNotNull && schemaArray.items.isEmpty)
+          return widgetBuilderInherited.uiConfig.localizedTexts.required();
         return null;
       },
       onSaved: (_) {
-        if (widget.schemaArray.items.isEmpty) {
+        if (schemaArray.items.isEmpty) {
           widgetBuilderInherited.updateObjectData(
             widgetBuilderInherited.data,
-            widget.schemaArray.idKey,
+            schemaArray.idKey,
             [],
           );
         }
@@ -44,13 +46,11 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
           children: [
             const SizedBox(width: double.infinity),
             GeneralSubtitle(
-              title: widget.schemaArray.title,
-              description: widget.schemaArray.description,
-              mainSchemaTitle: widget.mainSchema.title,
-              mainSchemaDescription: widget.mainSchema.description,
+              field: schemaArray,
+              mainSchema: widget.mainSchema,
             ),
-            ...widget.schemaArray.items.map((schemaLoop) {
-              final index = widget.schemaArray.items.indexOf(schemaLoop);
+            ...schemaArray.items.map((schemaLoop) {
+              final index = schemaArray.items.indexOf(schemaLoop);
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -87,31 +87,25 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
       },
     );
 
-    return Column(
-      children: [
-        widgetBuilder,
-        if (!widget.schemaArray.isArrayMultipleFile())
-          Align(
-            alignment: Alignment.centerRight,
-            child: widgetBuilderInherited.uiConfig.addItemBuilder != null
-                ? widgetBuilderInherited.uiConfig.addItemBuilder!(
-                    _addItem,
-                    widget.schemaArray.idKey,
-                  )
-                : TextButton.icon(
-                    onPressed: _addItem,
-                    icon: const Icon(Icons.add),
-                    label: Text(
-                      widgetBuilderInherited.localizedTexts.addItem(),
-                    ),
-                  ),
-          ),
-      ],
+    return FormSection(
+      child: Column(
+        children: [
+          widgetBuilder,
+          if (!schemaArray.isArrayMultipleFile())
+            Align(
+              alignment: Alignment.centerRight,
+              child: widgetBuilderInherited.uiConfig.addItemWidget(
+                _addItem,
+                schemaArray,
+              ),
+            ),
+        ],
+      ),
     );
   }
 
   void _addItem() {
-    if (widget.schemaArray.items.isEmpty) {
+    if (schemaArray.items.isEmpty) {
       _addFirstItem();
     } else {
       _addItemFromFirstSchema();
@@ -122,27 +116,27 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
 
   void _removeItem(int index) {
     setState(() {
-      widget.schemaArray.items.removeAt(index);
+      schemaArray.items.removeAt(index);
     });
   }
 
   void _addFirstItem() {
-    final itemsBaseSchema = widget.schemaArray.itemsBaseSchema;
+    final itemsBaseSchema = schemaArray.itemsBaseSchema;
     if (itemsBaseSchema is Map<String, dynamic>) {
       final newSchema = Schema.fromJson(
         itemsBaseSchema,
         id: '0',
-        parent: widget.schemaArray,
+        parent: schemaArray,
       );
 
-      widget.schemaArray.items.add(newSchema);
+      schemaArray.items.add(newSchema);
     } else {
-      widget.schemaArray.items.addAll(
+      schemaArray.items.addAll(
         (itemsBaseSchema as List).cast<Map<String, dynamic>>().map(
               (e) => Schema.fromJson(
                 e,
                 id: '0',
-                parent: widget.schemaArray,
+                parent: schemaArray,
               ),
             ),
       );
@@ -150,7 +144,7 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
   }
 
   void _addItemFromFirstSchema() {
-    final currentItems = widget.schemaArray.items;
+    final currentItems = schemaArray.items;
     final newSchemaObject =
         currentItems.first.copyWith(id: currentItems.length.toString());
 

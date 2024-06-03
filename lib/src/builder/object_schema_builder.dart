@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/general_subtitle_widget.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/object_schema_logic.dart';
 import 'package:flutter_jsonschema_builder/src/builder/widget_builder.dart';
+import 'package:flutter_jsonschema_builder/src/fields/shared.dart';
 import 'package:flutter_jsonschema_builder/src/models/models.dart';
 
 class ObjectSchemaBuilder extends StatefulWidget {
@@ -36,24 +37,24 @@ class _ObjectSchemaBuilderState extends State<ObjectSchemaBuilder> {
           setState(() => _schemaObject = value.schemaObject);
         }
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GeneralSubtitle(
-            title: widget.schemaObject.title,
-            description: widget.schemaObject.description,
-            mainSchemaTitle: widget.mainSchema.title,
-            mainSchemaDescription: widget.mainSchema.description,
-          ),
-          if (widget.schemaObject.properties != null)
-            ...widget.schemaObject.properties!.map(
-              (e) => FormFromSchemaBuilder(
-                schemaObject: widget.schemaObject,
-                mainSchema: widget.mainSchema,
-                schema: e,
-              ),
+      child: FormSection(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GeneralSubtitle(
+              field: widget.schemaObject,
+              mainSchema: widget.mainSchema,
             ),
-        ],
+            if (widget.schemaObject.properties != null)
+              ...widget.schemaObject.properties!.map(
+                (e) => FormFromSchemaBuilder(
+                  schemaObject: widget.schemaObject,
+                  mainSchema: widget.mainSchema,
+                  schema: e,
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

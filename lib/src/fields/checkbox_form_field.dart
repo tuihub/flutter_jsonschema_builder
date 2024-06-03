@@ -25,54 +25,41 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '${widget.property.title} ${widget.property.required ? "*" : ""}',
-          style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle,
-        ),
-        FormField<bool>(
-          key: Key(widget.property.idKey),
-          initialValue: widget.property.defaultValue ?? false,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          onSaved: (newValue) {
-            widget.onSaved(newValue);
-          },
-          validator: (value) {
-            if (widget.customValidator != null)
-              return widget.customValidator!(value);
-
-            return null;
-          },
-          builder: (field) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CheckboxListTile(
-                  value: (field.value == null) ? false : field.value,
-                  title: Text(
-                    widget.property.title,
-                    style: widget.property.readOnly
-                        ? const TextStyle(color: Colors.grey)
-                        : WidgetBuilderInherited.of(context).uiConfig.label,
-                  ),
-                  controlAffinity: ListTileControlAffinity.leading,
-                  onChanged: widget.property.readOnly
-                      ? null
-                      : (bool? value) {
-                          field.didChange(value);
-                          if (widget.onChanged != null && value != null) {
-                            widget.onChanged!(value);
-                          }
-                        },
-                ),
-                if (field.hasError) CustomErrorText(text: field.errorText!),
-              ],
-            );
-          },
-        ),
-      ],
+    return FormField<bool>(
+      key: Key(widget.property.idKey),
+      initialValue: widget.property.defaultValue ?? false,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      onSaved: widget.onSaved,
+      validator: widget.customValidator,
+      builder: (field) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CheckboxListTile(
+              isError: field.hasError,
+              value: field.value ?? false,
+              title: Text(
+                WidgetBuilderInherited.of(context)
+                    .uiConfig
+                    .labelText(widget.property),
+                style: widget.property.readOnly
+                    ? const TextStyle(color: Colors.grey)
+                    : WidgetBuilderInherited.of(context).uiConfig.label,
+              ),
+              controlAffinity: ListTileControlAffinity.leading,
+              onChanged: widget.property.readOnly
+                  ? null
+                  : (bool? value) {
+                      field.didChange(value);
+                      if (widget.onChanged != null && value != null) {
+                        widget.onChanged!(value);
+                      }
+                    },
+            ),
+            if (field.hasError) CustomErrorText(text: field.errorText!),
+          ],
+        );
+      },
     );
   }
 }

@@ -256,19 +256,22 @@ class PropertySchemaBuilder extends StatelessWidget {
       }
     }
 
+    if (!widgetBuilderInherited.uiConfig.debugMode) {
+      return _field;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 20),
-        if (!kReleaseMode)
-          Text(
-            'key: ${schemaProperty.idKey}',
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.green,
-              fontWeight: FontWeight.bold,
-            ),
+        const SizedBox(height: 5),
+        Text(
+          'key: ${schemaProperty.idKey}',
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.green,
+            fontWeight: FontWeight.bold,
           ),
+        ),
         _field,
       ],
     );

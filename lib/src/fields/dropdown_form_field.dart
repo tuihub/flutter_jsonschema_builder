@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
+import 'package:flutter_jsonschema_builder/src/fields/shared.dart';
 import '../models/models.dart';
 
 class DropDownJFormField extends PropertyFieldWidget<dynamic> {
@@ -56,45 +57,40 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
       }(),
       '[enumNames] and [enum]  must be the same size ',
     );
-    final widgetBuilderInherited = WidgetBuilderInherited.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '${widget.property.title} ${widget.property.required ? "*" : ""}',
-          style: widgetBuilderInherited.uiConfig.fieldTitle,
-        ),
-        GestureDetector(
-          onTap: _onTap,
-          child: AbsorbPointer(
-            absorbing: widget.customPickerHandler != null,
-            child: DropdownButtonFormField<dynamic>(
-              key: Key(widget.property.idKey),
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              hint: Text(widgetBuilderInherited.localizedTexts.select()),
-              isExpanded: false,
-              validator: (value) {
-                if (widget.property.required && value == null) {
-                  return 'required';
-                }
-                if (widget.customValidator != null)
-                  return widget.customValidator!(value);
-                return null;
-              },
-              items: _buildItems(),
-              value: value,
-              onChanged: _onChanged,
-              onSaved: widget.onSaved,
-              style: widget.property.readOnly
-                  ? const TextStyle(color: Colors.grey)
-                  : widgetBuilderInherited.uiConfig.label,
-              decoration: InputDecoration(
-                errorStyle: widgetBuilderInherited.uiConfig.error,
-              ),
+    final uiConfig = WidgetBuilderInherited.of(context).uiConfig;
+    return WrapFieldWithLabel(
+      property: widget.property,
+      child: GestureDetector(
+        onTap: _onTap,
+        child: AbsorbPointer(
+          absorbing: widget.customPickerHandler != null,
+          child: DropdownButtonFormField<dynamic>(
+            key: Key(widget.property.idKey),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            hint: Text(uiConfig.localizedTexts.select()),
+            isExpanded: false,
+            validator: (value) {
+              if (widget.property.requiredNotNull && value == null) {
+                return uiConfig.localizedTexts.required();
+              }
+              if (widget.customValidator != null)
+                return widget.customValidator!(value);
+              return null;
+            },
+            items: _buildItems(),
+            value: value,
+            onChanged: _onChanged,
+            onSaved: widget.onSaved,
+            style: widget.property.readOnly
+                ? const TextStyle(color: Colors.grey)
+                : uiConfig.label,
+            decoration: InputDecoration(
+              errorStyle: uiConfig.error,
+              labelText: uiConfig.fieldLabelText(widget.property),
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 

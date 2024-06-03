@@ -9,4 +9,5 @@ class LocalizedTexts {
   String addItem() => 'Add item';
   String addFile() => 'Add file';
   String shouldBeUri() => 'Should be a valid URL';
+  String submit() => 'Submit';
 }

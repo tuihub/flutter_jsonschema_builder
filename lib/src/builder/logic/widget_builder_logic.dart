@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/widget_builder.dart';
 import 'package:flutter_jsonschema_builder/src/models/json_form_schema_style.dart';
 import 'package:flutter_jsonschema_builder/src/models/schema.dart';
-import 'package:flutter_jsonschema_builder/src/utils/localized_texts.dart';
 
 class WidgetBuilderInherited extends InheritedWidget {
   WidgetBuilderInherited({
@@ -14,7 +13,6 @@ class WidgetBuilderInherited extends InheritedWidget {
     this.fileHandler,
     this.customPickerHandler,
     this.customValidatorHandler,
-    this.localizedTexts = const LocalizedTexts(),
   });
 
   final Schema mainSchema;
@@ -23,7 +21,6 @@ class WidgetBuilderInherited extends InheritedWidget {
   final FileHandler? fileHandler;
   final CustomPickerHandler? customPickerHandler;
   final CustomValidatorHandler? customValidatorHandler;
-  final LocalizedTexts localizedTexts;
   late final JsonFormSchemaUiConfig uiConfig;
 
   void setJsonFormSchemaStyle(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
+import 'package:flutter_jsonschema_builder/src/fields/shared.dart';
 
 class NumberJFormField extends PropertyFieldWidget<String?> {
   const NumberJFormField({
@@ -39,60 +40,54 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
 
   @override
   Widget build(BuildContext context) {
-    final widgetBuilderInherited = WidgetBuilderInherited.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '${widget.property.title} ${widget.property.required ? "*" : ""}',
-          style: widgetBuilderInherited.uiConfig.fieldTitle,
-        ),
-        TextFormField(
-          key: Key(widget.property.idKey),
-          keyboardType: TextInputType.number,
-          inputFormatters: inputFormatters,
-          autofocus: false,
-          onSaved: widget.onSaved,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          readOnly: widget.property.readOnly,
-          onChanged: (value) {
-            if (_timer != null && _timer!.isActive) _timer!.cancel();
+    final uiConfig = WidgetBuilderInherited.of(context).uiConfig;
+    return WrapFieldWithLabel(
+      property: widget.property,
+      child: TextFormField(
+        key: Key(widget.property.idKey),
+        keyboardType: TextInputType.number,
+        inputFormatters: inputFormatters,
+        autofocus: false,
+        onSaved: widget.onSaved,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        readOnly: widget.property.readOnly,
+        onChanged: (value) {
+          if (_timer != null && _timer!.isActive) _timer!.cancel();
 
-            _timer = Timer(const Duration(seconds: 1), () {
-              if (widget.onChanged != null) widget.onChanged!(value);
-            });
-          },
-          style: widget.property.readOnly
-              ? const TextStyle(color: Colors.grey)
-              : widgetBuilderInherited.uiConfig.label,
-          validator: (String? value) {
-            if (widget.property.required && value != null && value.isEmpty) {
-              return widgetBuilderInherited.localizedTexts.required();
-            }
-            if (widget.property.minLength != null &&
-                value != null &&
-                value.isNotEmpty &&
-                value.length <= widget.property.minLength!) {
-              return widgetBuilderInherited.localizedTexts
-                  .minLength(minLength: widget.property.minLength!);
-            }
+          _timer = Timer(const Duration(seconds: 1), () {
+            if (widget.onChanged != null) widget.onChanged!(value);
+          });
+        },
+        style: widget.property.readOnly
+            ? const TextStyle(color: Colors.grey)
+            : uiConfig.label,
+        validator: (String? value) {
+          if (widget.property.requiredNotNull &&
+              value != null &&
+              value.isEmpty) {
+            return uiConfig.localizedTexts.required();
+          }
+          if (widget.property.minLength != null &&
+              value != null &&
+              value.isNotEmpty &&
+              value.length <= widget.property.minLength!) {
+            return uiConfig.localizedTexts
+                .minLength(minLength: widget.property.minLength!);
+          }
 
-            if (widget.customValidator != null)
-              return widget.customValidator!(value);
-            return null;
-          },
-          decoration: InputDecoration(
-            helperText:
-                widget.property.help != null && widget.property.help!.isNotEmpty
-                    ? widget.property.help
-                    : null,
-            errorStyle: widgetBuilderInherited.uiConfig.error,
-          ),
+          if (widget.customValidator != null)
+            return widget.customValidator!(value);
+          return null;
+        },
+        decoration: InputDecoration(
+          helperText:
+              widget.property.help != null && widget.property.help!.isNotEmpty
+                  ? widget.property.help
+                  : null,
+          errorStyle: uiConfig.error,
+          labelText: uiConfig.fieldLabelText(widget.property),
         ),
-      ],
+      ),
     );
   }
-
-  String get decorationLabelText =>
-      '${widget.property.title} ${widget.property.required ? "*" : ""} ${widget.property.description ?? ""}';
 }

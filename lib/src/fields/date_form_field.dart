@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
+import 'package:flutter_jsonschema_builder/src/fields/shared.dart';
 import 'package:intl/intl.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 
@@ -38,56 +39,54 @@ class _DateJFormFieldState extends State<DateJFormField> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '${widget.property.title} ${widget.property.required ? "*" : ""}',
-          style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle,
-        ),
-        TextFormField(
-          key: Key(widget.property.idKey),
-          controller: txtDateCtrl,
-          keyboardType: TextInputType.phone,
-          validator: (value) {
-            if (widget.property.required && (value == null || value.isEmpty)) {
-              return 'Required';
-            }
-            if (widget.customValidator != null)
-              return widget.customValidator!(value);
-            return null;
-          },
-          // inputFormatters: [DateTextInputJsonFormatter()],
-          readOnly: widget.property.readOnly,
-          style: widget.property.readOnly
-              ? const TextStyle(color: Colors.grey)
-              : WidgetBuilderInherited.of(context).uiConfig.label,
+    final uiConfig = WidgetBuilderInherited.of(context).uiConfig;
 
-          onSaved: (value) {
-            if (value != null) widget.onSaved(formatter.parse(value));
-          },
-          onChanged: (value) {
-            try {
-              if (widget.onChanged != null && DateTime.tryParse(value) != null)
-                widget.onChanged!(formatter.parse(value));
-            } catch (e) {
-              return;
-            }
-          },
-          decoration: InputDecoration(
-            hintText: dateFormatString.toUpperCase(),
-            helperText:
-                widget.property.help != null && widget.property.help!.isNotEmpty
-                    ? widget.property.help
-                    : null,
-            suffixIcon: IconButton(
-              icon: const Icon(Icons.date_range_outlined),
-              onPressed: widget.property.readOnly ? null : _openCalendar,
-            ),
-            errorStyle: WidgetBuilderInherited.of(context).uiConfig.error,
+    return WrapFieldWithLabel(
+      property: widget.property,
+      child: TextFormField(
+        key: Key(widget.property.idKey),
+        controller: txtDateCtrl,
+        keyboardType: TextInputType.phone,
+        validator: (value) {
+          if (widget.property.requiredNotNull &&
+              (value == null || value.isEmpty)) {
+            return uiConfig.localizedTexts.required();
+          }
+          if (widget.customValidator != null)
+            return widget.customValidator!(value);
+          return null;
+        },
+        // inputFormatters: [DateTextInputJsonFormatter()],
+        readOnly: widget.property.readOnly,
+        style: widget.property.readOnly
+            ? const TextStyle(color: Colors.grey)
+            : uiConfig.label,
+
+        onSaved: (value) {
+          if (value != null) widget.onSaved(formatter.parse(value));
+        },
+        onChanged: (value) {
+          try {
+            if (widget.onChanged != null && DateTime.tryParse(value) != null)
+              widget.onChanged!(formatter.parse(value));
+          } catch (e) {
+            return;
+          }
+        },
+        decoration: InputDecoration(
+          hintText: dateFormatString.toUpperCase(),
+          helperText:
+              widget.property.help != null && widget.property.help!.isNotEmpty
+                  ? widget.property.help
+                  : null,
+          suffixIcon: IconButton(
+            icon: const Icon(Icons.date_range_outlined),
+            onPressed: widget.property.readOnly ? null : _openCalendar,
           ),
+          errorStyle: uiConfig.error,
+          labelText: uiConfig.fieldLabelText(widget.property),
         ),
-      ],
+      ),
     );
   }
 

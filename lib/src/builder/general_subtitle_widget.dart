@@ -5,32 +5,42 @@ import 'package:flutter_jsonschema_builder/src/models/models.dart';
 class GeneralSubtitle extends StatelessWidget {
   const GeneralSubtitle({
     super.key,
-    required this.title,
-    this.description,
-    this.mainSchemaTitle,
-    this.mainSchemaDescription,
+    required this.field,
+    this.mainSchema,
   });
 
-  final String title;
-  final String? description, mainSchemaTitle, mainSchemaDescription;
+  final Schema field;
+  final Schema? mainSchema;
 
   @override
   Widget build(BuildContext context) {
+    final uiConfig = WidgetBuilderInherited.of(context).uiConfig;
+    final removeItem = uiConfig.removeItemWidget(context, field);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 25),
-        if (mainSchemaTitle != title && title != kNoTitle) ...[
-          Text(
-            title,
-            style: WidgetBuilderInherited.of(context).uiConfig.subtitle,
+        const SizedBox(height: 10),
+        if (mainSchema?.titleOrId != field.titleOrId &&
+            // TODO:
+            field.titleOrId != kNoTitle) ...[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                field.titleOrId,
+                style: uiConfig.subtitle,
+              ),
+              if (removeItem != null) removeItem,
+            ],
           ),
           const Divider(),
         ],
-        if (description != null && description != mainSchemaDescription)
+        if (field.description != null &&
+            field.description != mainSchema?.description)
           Text(
-            description!,
-            style: WidgetBuilderInherited.of(context).uiConfig.description,
+            field.description!,
+            style: uiConfig.description,
           ),
       ],
     );

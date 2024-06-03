@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cross_file/cross_file.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/array_schema_builder.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
@@ -41,6 +40,7 @@ class JsonForm extends StatefulWidget {
   final JsonFormSchemaUiConfig? jsonFormSchemaUiConfig;
   final CustomPickerHandler? customPickerHandler;
   final CustomValidatorHandler? customValidatorHandler;
+
   @override
   _JsonFormState createState() => _JsonFormState();
 }
@@ -75,6 +75,7 @@ class _JsonFormState extends State<JsonForm> {
       child: Builder(
         builder: (context) {
           final widgetBuilderInherited = WidgetBuilderInherited.of(context);
+          final uiConfig = widgetBuilderInherited.uiConfig;
 
           return SingleChildScrollView(
             child: Form(
@@ -83,7 +84,7 @@ class _JsonFormState extends State<JsonForm> {
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
                   children: <Widget>[
-                    if (!kReleaseMode)
+                    if (uiConfig.debugMode)
                       TextButton(
                         onPressed: () {
                           inspect(mainSchema);
@@ -96,12 +97,14 @@ class _JsonFormState extends State<JsonForm> {
                       schema: mainSchema,
                     ),
                     const SizedBox(height: 20),
-                    widgetBuilderInherited.uiConfig.submitButtonBuilder == null
+                    uiConfig.submitButtonBuilder == null
                         ? ElevatedButton(
                             onPressed: () => onSubmit(widgetBuilderInherited),
-                            child: const Text('Submit'),
+                            child: Text(
+                              uiConfig.localizedTexts.submit(),
+                            ),
                           )
-                        : widgetBuilderInherited.uiConfig.submitButtonBuilder!(
+                        : uiConfig.submitButtonBuilder!(
                             () => onSubmit(widgetBuilderInherited),
                           ),
                   ],

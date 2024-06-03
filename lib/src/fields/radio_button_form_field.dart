@@ -81,45 +81,45 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
         return null;
       },
       builder: (field) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${widget.property.title} ${widget.property.required ? "*" : ""}',
-              style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: List<Widget>.generate(
-                widget.property.enumNames?.length ?? 0,
-                (int i) => RadioListTile(
-                  value: widget.property.enumm != null
-                      ? widget.property.enumm![i]
-                      : i,
-                  title: Text(
-                    widget.property.enumNames![i],
-                    style: widget.property.readOnly
-                        ? const TextStyle(color: Colors.grey)
-                        : WidgetBuilderInherited.of(context).uiConfig.label,
-                  ),
-                  groupValue: groupValue,
-                  onChanged: widget.property.readOnly
-                      ? null
-                      : (dynamic value) {
-                          log(value.toString());
-                          groupValue = value;
-                          if (value != null) {
-                            field.didChange(groupValue);
-                            if (widget.onChanged != null) {
-                              widget.onChanged!(groupValue!);
+        return WrapFieldWithLabel(
+          property: widget.property,
+          ignoreFieldLabel: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: List<Widget>.generate(
+                  widget.property.enumNames?.length ?? 0,
+                  (int i) => RadioListTile(
+                    value: widget.property.enumm != null
+                        ? widget.property.enumm![i]
+                        : i,
+                    title: Text(
+                      widget.property.enumNames![i],
+                      style: widget.property.readOnly
+                          ? const TextStyle(color: Colors.grey)
+                          : WidgetBuilderInherited.of(context).uiConfig.label,
+                    ),
+                    groupValue: groupValue,
+                    onChanged: widget.property.readOnly
+                        ? null
+                        : (dynamic value) {
+                            log(value.toString());
+                            groupValue = value;
+                            if (value != null) {
+                              field.didChange(groupValue);
+                              if (widget.onChanged != null) {
+                                widget.onChanged!(groupValue!);
+                              }
                             }
-                          }
-                        },
+                          },
+                  ),
                 ),
               ),
-            ),
-            if (field.hasError) CustomErrorText(text: field.errorText!),
-          ],
+              if (field.hasError) CustomErrorText(text: field.errorText!),
+            ],
+          ),
         );
       },
     );

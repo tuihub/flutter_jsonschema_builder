@@ -2,6 +2,7 @@ import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
+import 'package:flutter_jsonschema_builder/src/models/json_form_schema_style.dart';
 
 import './shared.dart';
 
@@ -30,13 +31,14 @@ class _FileJFormFieldState extends State<FileJFormField> {
 
   @override
   Widget build(BuildContext context) {
-    final widgetBuilderInherited = WidgetBuilderInherited.of(context);
+    final uiConfig = WidgetBuilderInherited.of(context).uiConfig;
 
     return FormField<List<XFile>>(
       key: Key(widget.property.idKey),
       validator: (value) {
-        if ((value == null || value.isEmpty) && widget.property.required) {
-          return widgetBuilderInherited.localizedTexts.required();
+        if ((value == null || value.isEmpty) &&
+            widget.property.requiredNotNull) {
+          return uiConfig.localizedTexts.required();
         }
 
         if (widget.customValidator != null)
@@ -56,11 +58,11 @@ class _FileJFormFieldState extends State<FileJFormField> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${widget.property.title} ${widget.property.required ? "*" : ""}',
-              style: widgetBuilderInherited.uiConfig.fieldTitle,
+              '${widget.property.titleOrId} ${widget.property.requiredNotNull ? "*" : ""}',
+              style: uiConfig.fieldTitle,
             ),
             const SizedBox(height: 10),
-            _buildButton(widgetBuilderInherited, field),
+            _buildButton(uiConfig, field),
             const SizedBox(height: 10),
             ListView.builder(
               shrinkWrap: true,
@@ -78,7 +80,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
                     overflow: TextOverflow.ellipsis,
                     style: widget.property.readOnly
                         ? const TextStyle(color: Colors.grey)
-                        : widgetBuilderInherited.uiConfig.label,
+                        : uiConfig.label,
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.close, size: 14),
@@ -126,11 +128,10 @@ class _FileJFormFieldState extends State<FileJFormField> {
   }
 
   Widget _buildButton(
-    WidgetBuilderInherited widgetBuilderInherited,
+    JsonFormSchemaUiConfig uiConfig,
     FormFieldState<List<XFile>> field,
   ) {
-    final addFileButtonBuilder =
-        widgetBuilderInherited.uiConfig.addFileButtonBuilder;
+    final addFileButtonBuilder = uiConfig.addFileButtonBuilder;
 
     if (addFileButtonBuilder != null &&
         addFileButtonBuilder(_onTap(field), widget.property.idKey) != null) {
@@ -142,7 +143,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
       style: ButtonStyle(
         minimumSize: WidgetStateProperty.all(const Size(double.infinity, 40)),
       ),
-      child: Text(widgetBuilderInherited.localizedTexts.addFile()),
+      child: Text(uiConfig.localizedTexts.addFile()),
     );
   }
 }
