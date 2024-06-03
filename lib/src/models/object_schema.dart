@@ -7,11 +7,13 @@ class SchemaObject extends Schema {
     required super.id,
     this.required = const [],
     this.dependencies,
-    super.title = kNoTitle,
+    String? title,
     super.description,
+    required super.nullable,
+    super.requiredProperty,
     super.parentIdKey,
     super.dependentsAddedBy,
-  }) : super(type: SchemaType.object);
+  }) : super(title: title ?? kNoTitle, type: SchemaType.object);
 
   factory SchemaObject.fromJson(
     String id,
@@ -24,6 +26,7 @@ class SchemaObject extends Schema {
       description: json['description'],
       required:
           json["required"] != null ? List<String>.from(json["required"]) : [],
+      nullable: SchemaType.isNullable(json['type']),
       dependencies: json['dependencies'],
       parentIdKey: parent?.idKey,
     );
@@ -67,13 +70,14 @@ class SchemaObject extends Schema {
       id: id,
       title: title,
       description: description,
+      required: required,
+      nullable: nullable,
       parentIdKey: parentIdKey ?? this.parentIdKey,
       dependentsAddedBy: dependentsAddedBy ?? this.dependentsAddedBy,
     )
       ..dependencies = dependencies
       ..oneOf = oneOf
-      ..order = order
-      ..required = required;
+      ..order = order;
 
     final otherProperties = properties!; //.map((p) => p.copyWith(id: p.id));
 
@@ -149,11 +153,11 @@ class SchemaObject extends Schema {
       );
 
       if (property is SchemaProperty) {
-        property.required = isRequired;
+        property.requiredProperty = isRequired;
         // Asignamos las propiedades que dependen de este
         property.setDependents(schema);
-      } else if (property is SchemaArray) {
-        property.required = isRequired;
+      } else {
+        property.requiredProperty = isRequired;
       }
 
       props.add(property);

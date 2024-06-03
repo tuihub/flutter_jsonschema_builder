@@ -12,16 +12,17 @@ class SchemaArray extends Schema {
   SchemaArray({
     required super.id,
     required this.itemsBaseSchema,
-    super.title = kNoTitle,
+    String? title,
     this.minItems,
     this.maxItems,
     this.uniqueItems = true,
     List<Schema>? items,
-    this.required = false,
+    super.requiredProperty,
+    required super.nullable,
     super.parentIdKey,
     super.dependentsAddedBy,
   })  : items = items ?? [],
-        super(type: SchemaType.array);
+        super(title: title ?? kNoTitle, type: SchemaType.array);
 
   factory SchemaArray.fromJson(
     String id,
@@ -36,6 +37,7 @@ class SchemaArray extends Schema {
       uniqueItems: json['uniqueItems'] ?? true,
       itemsBaseSchema: json['items'],
       parentIdKey: parent?.idKey,
+      nullable: SchemaType.isNullable(json['type']),
     );
     schemaArray.dependentsAddedBy.addAll(parent?.dependentsAddedBy ?? const []);
 
@@ -54,7 +56,8 @@ class SchemaArray extends Schema {
       minItems: minItems,
       uniqueItems: uniqueItems,
       itemsBaseSchema: itemsBaseSchema,
-      required: required,
+      requiredProperty: requiredProperty,
+      nullable: nullable,
       parentIdKey: parentIdKey ?? this.parentIdKey,
       dependentsAddedBy: dependentsAddedBy ?? this.dependentsAddedBy,
     );
@@ -81,8 +84,6 @@ class SchemaArray extends Schema {
   int? maxItems;
   bool uniqueItems;
 
-  bool required;
-
   bool isArrayMultipleFile() {
     return itemsBaseSchema is Map &&
         (itemsBaseSchema as Map)['format'] == 'data-url';
@@ -94,7 +95,8 @@ class SchemaArray extends Schema {
       title: title,
       type: SchemaType.string,
       format: PropertyFormat.dataurl,
-      required: required,
+      requiredProperty: requiredProperty,
+      nullable: nullable,
       description: description,
       parentIdKey: parentIdKey,
       dependentsAddedBy: dependentsAddedBy,

@@ -24,7 +24,7 @@ PropertyFormat propertyFormatFromString(String? value) {
 }
 
 dynamic safeDefaultValue(Map<String, dynamic> json) {
-  if (SchemaType.values.byName(json['type']) == SchemaType.boolean) {
+  if (SchemaType.fromJson(json['type']) == SchemaType.boolean) {
     if (json['default'] is String) return json['default'] == 'true';
 
     if (json['default'] is int) return json['default'] == 1;
@@ -37,12 +37,13 @@ class SchemaProperty extends Schema {
   SchemaProperty({
     required super.id,
     required super.type,
-    super.title = kNoTitle,
+    String? title,
     super.description,
     this.defaultValue,
     this.enumm,
     this.enumNames,
-    this.required = false,
+    super.requiredProperty = false,
+    required super.nullable,
     this.format = PropertyFormat.general,
     this.minLength,
     this.maxLength,
@@ -51,7 +52,9 @@ class SchemaProperty extends Schema {
     this.readOnly = false,
     super.parentIdKey,
     super.dependentsAddedBy,
-  });
+  }) : super(
+          title: title ?? kNoTitle,
+        );
 
   factory SchemaProperty.fromJson(
     String id,
@@ -61,7 +64,7 @@ class SchemaProperty extends Schema {
     final property = SchemaProperty(
       id: id,
       title: json['title'],
-      type: SchemaType.values.byName(json['type']),
+      type: SchemaType.fromJson(json['type']),
       format: propertyFormatFromString(json['format']),
       defaultValue: safeDefaultValue(json),
       description: json['description'],
@@ -73,6 +76,7 @@ class SchemaProperty extends Schema {
       oneOf: json['oneOf'],
       readOnly: json['readOnly'] ?? false,
       parentIdKey: parent?.idKey,
+      nullable: SchemaType.isNullable(json['type']),
     );
     property.dependentsAddedBy.addAll(parent?.dependentsAddedBy ?? const []);
 
@@ -104,7 +108,8 @@ class SchemaProperty extends Schema {
       defaultValue: defaultValue,
       enumNames: enumNames,
       enumm: enumm,
-      required: required,
+      requiredProperty: requiredProperty,
+      nullable: nullable,
       oneOf: oneOf,
       parentIdKey: parentIdKey ?? this.parentIdKey,
       dependentsAddedBy: dependentsAddedBy ?? this.dependentsAddedBy,
@@ -118,7 +123,6 @@ class SchemaProperty extends Schema {
       ..maxLength = maxLength
       ..minLength = minLength
       ..widget = widget
-      ..required = required
       ..dependents = dependents
       ..isMultipleFile = isMultipleFile;
 
@@ -137,7 +141,6 @@ class SchemaProperty extends Schema {
 
   // propiedades que se llenan con el json
   bool? disabled;
-  bool required;
   List<String>? order;
   bool? autoFocus;
   int? minLength, maxLength;
