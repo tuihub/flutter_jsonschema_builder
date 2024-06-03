@@ -54,29 +54,17 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // if (index >= 1)
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: widgetBuilderInherited.uiConfig.removeItemBuilder !=
-                            null
-                        ? widgetBuilderInherited.uiConfig.removeItemBuilder!(
-                            () => _removeItem(index),
-                            widget.schemaArray.idKey,
-                          )
-                        : TextButton.icon(
-                            onPressed: () => _removeItem(index),
-                            icon: const Icon(Icons.remove),
-                            label: Text(
-                              widgetBuilderInherited.localizedTexts
-                                  .removeItem(),
-                            ),
-                          ),
-                  ),
-                  FormFromSchemaBuilder(
-                    mainSchema: widget.mainSchema,
+                  RemoveItemInherited(
+                    removeItem: MapEntry(
+                      schemaArray.idKey,
+                      () => _removeItem(index),
+                    ),
                     schema: schemaLoop,
+                    child: FormFromSchemaBuilder(
+                      mainSchema: widget.mainSchema,
+                      schema: schemaLoop,
+                    ),
                   ),
-                  if (widget.schemaArray.items.length > 1) const Divider(),
                   const SizedBox(height: 10),
                 ],
               );
