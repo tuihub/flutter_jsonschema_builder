@@ -57,6 +57,13 @@ class _MyHomePageState extends State<MyHomePage> {
         "format": "data-url"
       }
     },
+    "texts": {
+      "type": "array",
+      "title": "Text Fields",
+      "items": {
+        "type": "string"
+      }
+    },
     "select": {
       "title" : "Select your Cola",
       "type": "string",

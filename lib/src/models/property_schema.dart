@@ -69,7 +69,7 @@ class SchemaProperty extends Schema {
       defaultValue: safeDefaultValue(json),
       description: json['description'],
       enumm: json['enum'],
-      enumNames: json['enumNames'],
+      enumNames: (json['enumNames'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
       minLength: json['minLength'],
       maxLength: json['maxLength'],
       pattern: json['pattern'],

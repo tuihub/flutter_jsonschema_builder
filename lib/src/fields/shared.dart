@@ -61,7 +61,7 @@ class WrapFieldWithLabel extends StatelessWidget {
     if (removeItem != null) {
       label = Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [if (showLabel) label else child, removeItem],
+        children: [if (showLabel) label else Expanded(child:child), removeItem],
       );
       if (!showLabel) return label;
     }
