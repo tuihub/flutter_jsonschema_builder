@@ -40,6 +40,8 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
     }
 
     value = widget.property.defaultValue;
+    if (widget.property.initialValue != null)
+      value = widget.property.initialValue;
     widget.triggerDefaultValue();
     super.initState();
   }

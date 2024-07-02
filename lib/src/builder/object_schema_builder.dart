@@ -21,11 +21,15 @@ class ObjectSchemaBuilder extends StatefulWidget {
 
 class _ObjectSchemaBuilderState extends State<ObjectSchemaBuilder> {
   late SchemaObject _schemaObject;
+  late Map<String, dynamic>? _initialValue;
 
   @override
   void initState() {
     super.initState();
     _schemaObject = widget.schemaObject;
+    if (_schemaObject.initialValue is Map<String, dynamic>?) {
+      _initialValue = _schemaObject.initialValue as Map<String, dynamic>?;
+    }
   }
 
   @override
@@ -50,7 +54,8 @@ class _ObjectSchemaBuilderState extends State<ObjectSchemaBuilder> {
                 (e) => FormFromSchemaBuilder(
                   schemaObject: widget.schemaObject,
                   mainSchema: widget.mainSchema,
-                  schema: e,
+                  schema: e.copyWith(id: e.id)
+                    ..initialValue = _initialValue?[e.id],
                 ),
               ),
           ],

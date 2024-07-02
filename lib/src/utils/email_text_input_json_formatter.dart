@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 
 class EmailTextInputJsonFormatter extends TextInputFormatter {
   var _index = 0;
+
   //var _shouldDotOnce = false;
   static const String _atomCharacters = "!#\$%&'*+-/=?^_`{|}~";
 

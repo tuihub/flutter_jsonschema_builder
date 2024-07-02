@@ -2,7 +2,9 @@ import 'package:flutter/services.dart';
 
 class DefaultTextInputJsonFormatter extends TextInputFormatter {
   final String? pattern;
+
   DefaultTextInputJsonFormatter({this.pattern});
+
   @override
   TextEditingValue formatEditUpdate(
     TextEditingValue oldValue,

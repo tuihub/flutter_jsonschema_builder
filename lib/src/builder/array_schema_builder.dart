@@ -22,6 +22,23 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
   SchemaArray get schemaArray => widget.schemaArray;
 
   @override
+  void initState() {
+    super.initState();
+    if (schemaArray.initialValue is List<dynamic>?) {
+      final initialValue = schemaArray.initialValue as List<dynamic>?;
+      initialValue?.asMap().forEach((key, value) {
+        final schema = Schema.fromJson(
+          schemaArray.itemsBaseSchema,
+          id: key.toString(),
+          parent: schemaArray,
+        );
+        schema.initialValue = value;
+        schemaArray.items.add(schema);
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 

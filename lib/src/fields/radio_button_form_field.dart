@@ -44,8 +44,12 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
     // fill groupValue
     if (widget.property.type == SchemaType.boolean) {
       groupValue = widget.property.defaultValue;
+      if (widget.property.initialValue != null)
+        groupValue = widget.property.initialValue;
     } else {
       groupValue = widget.property.defaultValue ?? 0;
+      if (widget.property.initialValue != null)
+        groupValue = widget.property.initialValue ?? 0;
     }
 
     widget.triggerDefaultValue();

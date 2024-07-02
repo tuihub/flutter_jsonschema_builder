@@ -5,6 +5,7 @@ import 'package:flutter_jsonschema_builder/src/models/property_schema.dart';
 
 class CustomErrorText extends StatelessWidget {
   const CustomErrorText({super.key, required this.text});
+
   final String text;
 
   @override
@@ -61,7 +62,10 @@ class WrapFieldWithLabel extends StatelessWidget {
     if (removeItem != null) {
       label = Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [if (showLabel) label else Expanded(child:child), removeItem],
+        children: [
+          if (showLabel) label else Expanded(child: child),
+          removeItem
+        ],
       );
       if (!showLabel) return label;
     }

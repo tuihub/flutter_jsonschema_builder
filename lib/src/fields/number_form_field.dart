@@ -48,6 +48,7 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
         keyboardType: TextInputType.number,
         inputFormatters: inputFormatters,
         autofocus: false,
+        initialValue: widget.property.initialValue ?? widget.property.defaultValue,
         onSaved: widget.onSaved,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         readOnly: widget.property.readOnly,

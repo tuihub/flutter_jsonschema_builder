@@ -56,6 +56,7 @@ abstract class Schema {
     required this.id,
     required this.type,
     required this.nullable,
+    this.initialValue,
     this.requiredProperty = false,
     String? title,
     this.description,
@@ -108,6 +109,7 @@ abstract class Schema {
 
   bool requiredProperty;
   final bool nullable;
+  late dynamic initialValue;
 
   bool get requiredNotNull => requiredProperty && !nullable;
 

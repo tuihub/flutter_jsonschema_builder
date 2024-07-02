@@ -61,7 +61,7 @@ class SchemaObject extends Schema {
   }
 
   @override
-  Schema copyWith({
+  SchemaObject copyWith({
     required String id,
     String? parentIdKey,
     List<String>? dependentsAddedBy,

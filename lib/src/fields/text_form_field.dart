@@ -52,7 +52,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
           keyboardType: getTextInputTypeFromFormat(property.format),
           maxLines: property.widget == "textarea" ? null : 1,
           obscureText: property.format == PropertyFormat.password,
-          initialValue: property.defaultValue ?? '',
+          initialValue: property.initialValue ?? property.defaultValue ?? '',
           onSaved: widget.onSaved,
           maxLength: property.maxLength,
           inputFormatters: [textInputCustomFormatter(property.format)],

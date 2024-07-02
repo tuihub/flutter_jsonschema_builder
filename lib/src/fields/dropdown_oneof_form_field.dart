@@ -59,7 +59,9 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
 
     // fill selected value
     try {
-      final defaultValue = widget.property.defaultValue.toLowerCase();
+      var defaultValue = widget.property.defaultValue.toLowerCase();
+      if (widget.property.initialValue != null)
+        defaultValue = widget.property.initialValue.toLowerCase();
       final exists = listOfModel.firstWhere(
         (e) =>
             e.oneOfModelEnum != null &&

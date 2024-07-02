@@ -1,9 +1,9 @@
+import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 import 'package:flutter_jsonschema_builder/src/fields/shared.dart';
 import 'package:intl/intl.dart';
-import 'package:extended_masked_text/extended_masked_text.dart';
 
 import '../utils/date_text_input_json_formatter.dart';
 
@@ -27,7 +27,9 @@ class _DateJFormFieldState extends State<DateJFormField> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final defaultValue = widget.property.defaultValue as String?;
+      var defaultValue = widget.property.defaultValue as String?;
+      if (widget.property.initialValue is String?)
+        defaultValue = widget.property.initialValue as String?;
       if (defaultValue != null && DateTime.tryParse(defaultValue) != null)
         txtDateCtrl.updateText(defaultValue);
     });

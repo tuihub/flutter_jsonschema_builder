@@ -43,8 +43,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final json = '''
- {
+  final jsonSchema = '''
+{
   "title": "Texto",
   "type": "object",
   "properties": {
@@ -103,8 +103,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   }
 }
+  ''';
 
-
+  final jsonData = '''
+{
+  "files": [
+    "https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg"
+  ],
+  "texts": [
+    "Hello",
+    "World"
+  ],
+  "select": 0,
+  "profession": "trader"
+}
   ''';
 
   final uiSchema = '''
@@ -140,7 +152,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Material(
               child: JsonForm(
-                jsonSchema: json,
+                jsonSchema: jsonSchema,
+                jsonData: jsonData,
                 uiSchema: uiSchema,
                 onFormDataSaved: (data) {
                   inspect(data);
