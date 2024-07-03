@@ -142,6 +142,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return [file1, file2, file3];
   }
 
+  final _formController = JsonFormController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -152,6 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Material(
               child: JsonForm(
+                controller: _formController,
                 jsonSchema: jsonSchema,
                 jsonData: jsonData,
                 uiSchema: uiSchema,
@@ -244,7 +247,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                 },
               ),
-            )
+            ),
+            ElevatedButton(
+              onPressed: _formController.submit,
+              child: const Text('Controller Submit'),
+            ),
           ],
         ),
       ),

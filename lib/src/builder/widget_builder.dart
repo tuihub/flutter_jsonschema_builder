@@ -23,6 +23,7 @@ typedef CustomValidatorHandler = Map<String, String? Function(dynamic)?>
 class JsonForm extends StatefulWidget {
   const JsonForm({
     super.key,
+    this.controller,
     required this.jsonSchema,
     this.jsonData = '{}',
     this.uiSchema,
@@ -32,6 +33,8 @@ class JsonForm extends StatefulWidget {
     this.customPickerHandler,
     this.customValidatorHandler,
   });
+
+  final JsonFormController? controller;
 
   final String jsonSchema;
   final String jsonData;
@@ -85,6 +88,7 @@ class _JsonFormState extends State<JsonForm> {
         builder: (context) {
           final widgetBuilderInherited = WidgetBuilderInherited.of(context);
           final uiConfig = widgetBuilderInherited.uiConfig;
+          widget.controller?._setSubmitFunction(() => onSubmit(widgetBuilderInherited));
 
           return SingleChildScrollView(
             child: Form(
@@ -197,5 +201,19 @@ class FormFromSchemaBuilder extends StatelessWidget {
     }
 
     return const SizedBox.shrink();
+  }
+}
+
+class JsonFormController {
+  JsonFormController();
+
+  late void Function() _submit;
+
+  void _setSubmitFunction(Function() submit) {
+    _submit = submit;
+  }
+
+  void submit() {
+    _submit();
   }
 }
