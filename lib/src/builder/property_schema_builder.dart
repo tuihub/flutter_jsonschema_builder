@@ -2,14 +2,13 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:cross_file/cross_file.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/object_schema_logic.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/builder/widget_builder.dart';
+import 'package:flutter_jsonschema_builder/src/fields/dropdown_oneof_form_field.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 import 'package:flutter_jsonschema_builder/src/fields/radio_button_form_field.dart';
-import 'package:flutter_jsonschema_builder/src/fields/dropdown_oneof_form_field.dart';
 import 'package:flutter_jsonschema_builder/src/models/models.dart';
 import 'package:flutter_jsonschema_builder/src/models/one_of_model.dart';
 import 'package:flutter_jsonschema_builder/src/utils/date_text_input_json_formatter.dart';
@@ -22,6 +21,7 @@ class PropertySchemaBuilder extends StatelessWidget {
     required this.schemaProperty,
     this.onChangeListen,
   });
+
   final Schema mainSchema;
   final SchemaProperty schemaProperty;
   final ValueChanged<dynamic>? onChangeListen;
@@ -179,7 +179,7 @@ class PropertySchemaBuilder extends StatelessWidget {
               updateData(context, val);
             },
             onChanged: (value) {
-              dispatchStringEventToParent(context, value!);
+              dispatchStringEventToParent(context, value);
               updateData(context, value);
               widgetBuilderInherited.notifyChanges();
             },
@@ -247,7 +247,7 @@ class PropertySchemaBuilder extends StatelessWidget {
               updateData(context, val);
             },
             onChanged: (value) {
-              dispatchStringEventToParent(context, value!);
+              dispatchStringEventToParent(context, value);
               updateData(context, value);
               widgetBuilderInherited.notifyChanges();
             },
@@ -288,13 +288,13 @@ class PropertySchemaBuilder extends StatelessWidget {
 
   // @temp Functions
   /// Cuando se valida si es string o no
-  void dispatchStringEventToParent(BuildContext context, String value) {
-    if (value.isEmpty && schemaProperty.isDependentsActive) {
+  void dispatchStringEventToParent(BuildContext context, String? value) {
+    if ((value?.isEmpty ?? true) && schemaProperty.isDependentsActive) {
       ObjectSchemaInherited.of(context)
           .listenChangeProperty(false, schemaProperty);
     }
 
-    if (value.isNotEmpty && !schemaProperty.isDependentsActive) {
+    if ((value?.isNotEmpty ?? false) && !schemaProperty.isDependentsActive) {
       ObjectSchemaInherited.of(context)
           .listenChangeProperty(true, schemaProperty);
     }

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
@@ -20,7 +18,7 @@ class NumberJFormField extends PropertyFieldWidget<String?> {
 }
 
 class _NumberJFormFieldState extends State<NumberJFormField> {
-  Timer? _timer;
+  TextEditingController _controller = TextEditingController();
 
   static final inputFormatters = [
     FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
@@ -29,12 +27,27 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
   @override
   void initState() {
     widget.triggerDefaultValue();
+    _controller.text =
+        widget.property.initialValue ?? widget.property.defaultValue ?? '';
     super.initState();
   }
 
   @override
+  void didUpdateWidget(NumberJFormField oldWidget) {
+    final data = WidgetBuilderInherited.of(context).getObjectData(
+      WidgetBuilderInherited.of(context).data,
+      widget.property.idKey,
+    );
+    if (data is String? && data != _controller.text)
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _controller.text = data ?? '';
+      });
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void dispose() {
-    _timer?.cancel();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -45,19 +58,15 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
       property: widget.property,
       child: TextFormField(
         key: Key(widget.property.idKey),
+        controller: _controller,
         keyboardType: TextInputType.number,
         inputFormatters: inputFormatters,
         autofocus: false,
-        initialValue: widget.property.initialValue ?? widget.property.defaultValue,
         onSaved: widget.onSaved,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         readOnly: widget.property.readOnly,
         onChanged: (value) {
-          if (_timer != null && _timer!.isActive) _timer!.cancel();
-
-          _timer = Timer(const Duration(seconds: 1), () {
-            if (widget.onChanged != null) widget.onChanged!(value);
-          });
+          if (widget.onChanged != null) widget.onChanged!(value);
         },
         style: widget.property.readOnly
             ? const TextStyle(color: Colors.grey)

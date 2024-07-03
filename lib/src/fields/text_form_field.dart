@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
@@ -7,8 +5,8 @@ import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 import 'package:flutter_jsonschema_builder/src/fields/shared.dart';
 import 'package:flutter_jsonschema_builder/src/utils/input_validation_json_schema.dart';
 
-import '../utils/utils.dart';
 import '../models/models.dart';
+import '../utils/utils.dart';
 
 class TextJFormField extends PropertyFieldWidget<String> {
   const TextJFormField({
@@ -24,18 +22,32 @@ class TextJFormField extends PropertyFieldWidget<String> {
 }
 
 class _TextJFormFieldState extends State<TextJFormField> {
-  Timer? _timer;
   SchemaProperty get property => widget.property;
+  TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
     widget.triggerDefaultValue();
+    _controller.text = property.initialValue ?? property.defaultValue ?? '';
     super.initState();
   }
 
   @override
+  void didUpdateWidget(TextJFormField oldWidget) {
+    final data = WidgetBuilderInherited.of(context).getObjectData(
+      WidgetBuilderInherited.of(context).data,
+      widget.property.idKey,
+    );
+    if (data is String? && data != _controller.text)
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _controller.text = data ?? '';
+      });
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void dispose() {
-    _timer?.cancel();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -48,22 +60,18 @@ class _TextJFormFieldState extends State<TextJFormField> {
         absorbing: property.disabled ?? false,
         child: TextFormField(
           key: Key(property.idKey),
+          controller: _controller,
           autofocus: (property.autoFocus ?? false),
           keyboardType: getTextInputTypeFromFormat(property.format),
           maxLines: property.widget == "textarea" ? null : 1,
           obscureText: property.format == PropertyFormat.password,
-          initialValue: property.initialValue ?? property.defaultValue ?? '',
           onSaved: widget.onSaved,
           maxLength: property.maxLength,
           inputFormatters: [textInputCustomFormatter(property.format)],
           autovalidateMode: AutovalidateMode.onUserInteraction,
           readOnly: property.readOnly,
           onChanged: (value) {
-            if (_timer != null && _timer!.isActive) _timer!.cancel();
-
-            _timer = Timer(const Duration(seconds: 1), () {
-              if (widget.onChanged != null) widget.onChanged!(value);
-            });
+            if (widget.onChanged != null) widget.onChanged!(value);
           },
           validator: (String? value) {
             if (property.requiredNotNull && value != null) {

@@ -33,7 +33,6 @@ abstract class PropertyFieldWidget<T> extends StatefulWidget {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var value = property.defaultValue;
       if (property.initialValue != null) value = property.initialValue;
-      if (value == null) return completer.complete();
 
       try {
         if (property.format == PropertyFormat.date) {

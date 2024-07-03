@@ -11,6 +11,7 @@ class ArraySchemaBuilder extends StatefulWidget {
     required this.mainSchema,
     required this.schemaArray,
   });
+
   final Schema mainSchema;
   final SchemaArray schemaArray;
 
@@ -120,8 +121,16 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
   }
 
   void _removeItem(int index) {
+    final widgetBuilderInherited = WidgetBuilderInherited.of(context);
+    widgetBuilderInherited.removeObjectData(
+      WidgetBuilderInherited.of(context).data,
+      schemaArray.items[index].idKey,
+    );
     setState(() {
       schemaArray.items.removeAt(index);
+      for (var i = 0; i < schemaArray.items.length; i++) {
+        schemaArray.items[i] = schemaArray.items[i].copyWith(id: i.toString());
+      }
     });
   }
 

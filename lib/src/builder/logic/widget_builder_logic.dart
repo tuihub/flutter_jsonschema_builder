@@ -94,6 +94,58 @@ class WidgetBuilderInherited extends InheritedWidget {
     }
   }
 
+  /// remove object from [data] with key from jsonSchema
+  void removeObjectData(dynamic object, String path) {
+    final stack = path.split('.');
+
+    while (stack.length > 1) {
+      final _key = stack[0];
+      final _keyNumeric = int.tryParse(_key);
+
+      final tempObject = object[_keyNumeric ?? _key];
+      if (tempObject != null) {
+        object = tempObject;
+      }
+
+      stack.removeAt(0);
+    }
+
+    final _key = stack[0];
+    final _keyNumeric = int.tryParse(_key);
+
+    if (object is List && _keyNumeric != null) {
+      object.removeAt(_keyNumeric);
+    } else {
+      object.remove(_key);
+    }
+  }
+
+  /// get object from [data] with key from jsonSchema
+  dynamic getObjectData(dynamic object, String path) {
+    final stack = path.split('.');
+
+    while (stack.length > 1) {
+      final _key = stack[0];
+      final _keyNumeric = int.tryParse(_key);
+
+      final tempObject = object[_keyNumeric ?? _key];
+      if (tempObject != null) {
+        object = tempObject;
+      }
+
+      stack.removeAt(0);
+    }
+
+    final _key = stack[0];
+    final _keyNumeric = int.tryParse(_key);
+
+    try {
+      return object[_keyNumeric ?? _key];
+    } catch (e) {
+      return null;
+    }
+  }
+
   void notifyChanges() {
     // if (onChanged != null) onChanged!(data);
   }
