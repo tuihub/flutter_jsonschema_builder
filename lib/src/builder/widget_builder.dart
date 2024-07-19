@@ -72,7 +72,8 @@ class _JsonFormState extends State<JsonForm> {
     ) as SchemaObject)
       ..setUiSchema(
         widget.uiSchema != null ? json.decode(widget.uiSchema!) : null,
-      )..initialValue = initialValue;
+      )
+      ..initialValue = initialValue;
 
     super.initState();
   }
@@ -88,7 +89,8 @@ class _JsonFormState extends State<JsonForm> {
         builder: (context) {
           final widgetBuilderInherited = WidgetBuilderInherited.of(context);
           final uiConfig = widgetBuilderInherited.uiConfig;
-          widget.controller?._setSubmitFunction(() => onSubmit(widgetBuilderInherited));
+          widget.controller
+              ?._setSubmitFunction(() => onSubmit(widgetBuilderInherited));
 
           return SingleChildScrollView(
             child: Form(
@@ -157,13 +159,15 @@ class _JsonFormState extends State<JsonForm> {
   }
 
   //  Form methods
-  void onSubmit(WidgetBuilderInherited widgetBuilderInherited) {
+  bool onSubmit(WidgetBuilderInherited widgetBuilderInherited) {
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       _formKey.currentState?.save();
 
       log(widgetBuilderInherited.data.toString());
       widget.onFormDataSaved(widgetBuilderInherited.data);
+      return true;
     }
+    return false;
   }
 }
 
@@ -174,6 +178,7 @@ class FormFromSchemaBuilder extends StatelessWidget {
     required this.schema,
     this.schemaObject,
   });
+
   final Schema mainSchema;
   final Schema schema;
   final SchemaObject? schemaObject;
@@ -207,13 +212,13 @@ class FormFromSchemaBuilder extends StatelessWidget {
 class JsonFormController {
   JsonFormController();
 
-  late void Function() _submit;
+  late bool Function() _submit;
 
-  void _setSubmitFunction(Function() submit) {
+  void _setSubmitFunction(bool Function() submit) {
     _submit = submit;
   }
 
-  void submit() {
-    _submit();
+  bool submit() {
+    return _submit();
   }
 }
