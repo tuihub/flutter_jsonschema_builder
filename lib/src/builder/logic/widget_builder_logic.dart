@@ -42,11 +42,13 @@ class WidgetBuilderInherited extends InheritedWidget {
           ),
       fieldTitle: uiConfig?.fieldTitle ?? textTheme.bodyMedium,
       label: uiConfig?.label,
+      expandGenesis: uiConfig?.expandGenesis ?? false,
       //builders
       addItemBuilder: uiConfig?.addItemBuilder,
       removeItemBuilder: uiConfig?.removeItemBuilder,
       submitButtonBuilder: uiConfig?.submitButtonBuilder,
       addFileButtonBuilder: uiConfig?.addFileButtonBuilder,
+      headerTitleBuilder: uiConfig?.headerTitleBuilder,
     );
   }
 

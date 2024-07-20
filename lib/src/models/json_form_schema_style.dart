@@ -12,12 +12,14 @@ class JsonFormSchemaUiConfig {
     this.subtitle,
     this.description,
     this.label,
+    this.expandGenesis = false,
     this.addItemBuilder,
     this.removeItemBuilder,
     this.submitButtonBuilder,
     this.addFileButtonBuilder,
     this.formSectionBuilder,
     this.fieldWrapperBuilder,
+    this.headerTitleBuilder,
     LocalizedTexts? localizedTexts,
     bool? debugMode,
     LabelPosition? labelPosition,
@@ -35,6 +37,7 @@ class JsonFormSchemaUiConfig {
   final LocalizedTexts localizedTexts;
   final bool debugMode;
   final LabelPosition labelPosition;
+  final bool expandGenesis;
 
   final Widget Function(VoidCallback onPressed, String key)? addItemBuilder;
   final Widget Function(VoidCallback onPressed, String key)? removeItemBuilder;
@@ -50,6 +53,8 @@ class JsonFormSchemaUiConfig {
 
   final Widget Function(Widget child)? formSectionBuilder;
   final Widget? Function(FieldWrapperParams params)? fieldWrapperBuilder;
+
+  final Widget Function(String title, String description)? headerTitleBuilder;
 
   String labelText(SchemaProperty property) =>
       '${property.titleOrId} ${property.requiredNotNull ? "*" : ""}';

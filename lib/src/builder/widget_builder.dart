@@ -95,35 +95,40 @@ class _JsonFormState extends State<JsonForm> {
           return SingleChildScrollView(
             child: Form(
               key: _formKey,
-              child: Container(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  children: <Widget>[
-                    if (uiConfig.debugMode)
-                      TextButton(
-                        onPressed: () {
-                          inspect(mainSchema);
-                        },
-                        child: const Text('INSPECT'),
-                      ),
-                    _buildHeaderTitle(context),
-                    FormFromSchemaBuilder(
-                      mainSchema: mainSchema,
-                      schema: mainSchema,
+              child: Column(
+                children: <Widget>[
+                  if (uiConfig.debugMode)
+                    TextButton(
+                      onPressed: () {
+                        inspect(mainSchema);
+                      },
+                      child: const Text('INSPECT'),
                     ),
-                    const SizedBox(height: 20),
-                    uiConfig.submitButtonBuilder == null
-                        ? ElevatedButton(
+                  if (uiConfig.headerTitleBuilder != null)
+                    uiConfig.headerTitleBuilder!(
+                      mainSchema.title,
+                      mainSchema.description ?? '',
+                    )
+                  else
+                    _buildHeaderTitle(context),
+                  FormFromSchemaBuilder(
+                    mainSchema: mainSchema,
+                    schema: mainSchema,
+                  ),
+                  uiConfig.submitButtonBuilder == null
+                      ? Container(
+                          margin: const EdgeInsets.only(top: 20),
+                          child: ElevatedButton(
                             onPressed: () => onSubmit(widgetBuilderInherited),
                             child: Text(
                               uiConfig.localizedTexts.submit(),
                             ),
-                          )
-                        : uiConfig.submitButtonBuilder!(
-                            () => onSubmit(widgetBuilderInherited),
                           ),
-                  ],
-                ),
+                        )
+                      : uiConfig.submitButtonBuilder!(
+                          () => onSubmit(widgetBuilderInherited),
+                        ),
+                ],
               ),
             ),
           );

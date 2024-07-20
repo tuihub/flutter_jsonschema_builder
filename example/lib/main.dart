@@ -152,100 +152,105 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Material(
-              child: JsonForm(
-                controller: _formController,
-                jsonSchema: jsonSchema,
-                jsonData: jsonData,
-                uiSchema: uiSchema,
-                onFormDataSaved: (data) {
-                  inspect(data);
-                },
-                fileHandler: () => {
-                  'files': defaultCustomFileHandler,
-                  'file': () async {
-                    return [
-                      XFile(
-                          'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg')
-                    ];
+            Container(
+              margin: const EdgeInsets.all(20),
+              child: Material(
+                child: JsonForm(
+                  controller: _formController,
+                  jsonSchema: jsonSchema,
+                  jsonData: jsonData,
+                  uiSchema: uiSchema,
+                  onFormDataSaved: (data) {
+                    inspect(data);
                   },
-                  '*': defaultCustomFileHandler
-                },
-                customPickerHandler: () => {
-                  '*': (data) async {
-                    return showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Scaffold(
-                            body: Container(
-                              margin: const EdgeInsets.all(20),
-                              child: Column(
-                                children: [
-                                  const Text('My Custom Picker'),
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: data.keys.length,
-                                    itemBuilder: (context, index) {
-                                      return ListTile(
-                                        title: Text(data.values
-                                            .toList()[index]
-                                            .toString()),
-                                        onTap: () => Navigator.pop(
-                                            context, data.keys.toList()[index]),
-                                      );
-                                    },
-                                  ),
-                                ],
+                  fileHandler: () => {
+                    'files': defaultCustomFileHandler,
+                    'file': () async {
+                      return [
+                        XFile(
+                            'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg')
+                      ];
+                    },
+                    '*': defaultCustomFileHandler
+                  },
+                  customPickerHandler: () => {
+                    '*': (data) async {
+                      return showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Scaffold(
+                              body: Container(
+                                margin: const EdgeInsets.all(20),
+                                child: Column(
+                                  children: [
+                                    const Text('My Custom Picker'),
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: data.keys.length,
+                                      itemBuilder: (context, index) {
+                                        return ListTile(
+                                          title: Text(data.values
+                                              .toList()[index]
+                                              .toString()),
+                                          onTap: () => Navigator.pop(context,
+                                              data.keys.toList()[index]),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        });
-                  }
-                },
-                jsonFormSchemaUiConfig: JsonFormSchemaUiConfig(
-                  title: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                  ),
-                  fieldTitle: const TextStyle(color: Colors.pink, fontSize: 12),
-                  submitButtonBuilder: (onSubmit) => TextButton.icon(
-                    onPressed: onSubmit,
-                    icon: const Icon(Icons.heart_broken),
-                    label: const Text('Enviar'),
-                  ),
-                  addItemBuilder: (onPressed, key) => TextButton.icon(
-                    onPressed: onPressed,
-                    icon: const Icon(Icons.plus_one),
-                    label: const Text('Add Item'),
-                  ),
-                  addFileButtonBuilder: (onPressed, key) {
-                    if (['file', 'file3'].contains(key)) {
-                      return OutlinedButton(
-                        onPressed: onPressed,
-                        style: ButtonStyle(
-                          minimumSize: WidgetStateProperty.all(
-                              const Size(double.infinity, 40)),
-                          backgroundColor: WidgetStateProperty.all(
-                            const Color(0xffcee5ff),
-                          ),
-                          side: WidgetStateProperty.all(
-                              const BorderSide(color: Color(0xffafd5ff))),
-                          textStyle: WidgetStateProperty.all(
-                              const TextStyle(color: Color(0xff057afb))),
-                        ),
-                        child: Text('+ Agregar archivo $key'),
-                      );
+                            );
+                          });
                     }
+                  },
+                  jsonFormSchemaUiConfig: JsonFormSchemaUiConfig(
+                    expandGenesis: true,
+                    title: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                    fieldTitle:
+                        const TextStyle(color: Colors.pink, fontSize: 12),
+                    submitButtonBuilder: (onSubmit) => TextButton.icon(
+                      onPressed: onSubmit,
+                      icon: const Icon(Icons.heart_broken),
+                      label: const Text('Enviar'),
+                    ),
+                    addItemBuilder: (onPressed, key) => TextButton.icon(
+                      onPressed: onPressed,
+                      icon: const Icon(Icons.plus_one),
+                      label: const Text('Add Item'),
+                    ),
+                    addFileButtonBuilder: (onPressed, key) {
+                      if (['file', 'file3'].contains(key)) {
+                        return OutlinedButton(
+                          onPressed: onPressed,
+                          style: ButtonStyle(
+                            minimumSize: WidgetStateProperty.all(
+                                const Size(double.infinity, 40)),
+                            backgroundColor: WidgetStateProperty.all(
+                              const Color(0xffcee5ff),
+                            ),
+                            side: WidgetStateProperty.all(
+                                const BorderSide(color: Color(0xffafd5ff))),
+                            textStyle: WidgetStateProperty.all(
+                                const TextStyle(color: Color(0xff057afb))),
+                          ),
+                          child: Text('+ Agregar archivo $key'),
+                        );
+                      }
 
-                    return null;
+                      return null;
+                    },
+                  ),
+                  customValidatorHandler: () => {
+                    'files': (value) {
+                      return null;
+                    }
                   },
                 ),
-                customValidatorHandler: () => {
-                  'files': (value) {
-                    return null;
-                  }
-                },
               ),
             ),
             ElevatedButton(
