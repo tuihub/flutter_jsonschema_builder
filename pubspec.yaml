@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  intl: ^0.19.0
+  intl: any
   extended_masked_text: ^3.0.1
   cross_file: ^0.3.4+1
 
